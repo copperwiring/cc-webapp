@@ -29,6 +29,10 @@ prolific_id = st.text_input('Enter your Prolific ID')
 if st.button('Submit') and prolific_id:
     st.write("Instructions")
 
+st.write("Describe in words the image that comes to your mind when you think of your breakfast in your country")
+breakfast_description = st.text_input('Breakfast Description')
+
+
 
 
 # img_description = st.text_input('Image Desription')
