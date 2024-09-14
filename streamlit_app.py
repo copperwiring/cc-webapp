@@ -27,8 +27,8 @@ st.title('CC-T2I')
 
 prolific_id = st.text_input('Enter your Prolific ID')
 confirmation = st.checkbox('Is the entered Prolific ID correct?')
-if confirmation:
-    if st.button('Submit') and prolific_id:
+if confirmation and prolific_id:
+    if st.button('Submit'):
         st.session_state['prolific_id'] = prolific_id
         st.write("Instructions")
         st.warning("You will not be able to change your Prolific ID after this point.")
