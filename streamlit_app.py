@@ -42,6 +42,7 @@ if st.button('Submit') and prolific_id:
             st.warning("Please enter a description for your breakfast.")
     else:
         st.warning("Please verify your Prolific ID and confirm. Once you confirm, you will not be able to change your Prolific ID.")
+        prolific_id = st.text_input('Re-enter your Prolific ID', value=prolific_id)
 
 
 
