@@ -31,17 +31,17 @@ if st.button('Submit') and prolific_id:
     if confirmation:
         st.write("Instructions")
         st.warning("You will not be able to change your Prolific ID after this point.")
+        
+        st.write("Describe in words the image that comes to your mind when you think of your breakfast in your country")
+        breakfast_description = st.text_input('Breakfast Description')
+        
+        if breakfast_description:
+            st.warning("Once you enter your prompt and press enter, you will not be able to change it.")
+            prompt_description = st.text_input('Enter your prompt', key="prompt", on_change=lambda: st.session_state.pop("prompt", None))
+        else:
+            st.warning("Please enter a description for your breakfast.")
     else:
         st.warning("Please verify your Prolific ID and confirm. Once you confirm, you will not be able to change your Prolific ID.")
-
-    st.write("Describe in words the image that comes to your mind when you think of your breakfast in your country")
-    breakfast_description = st.text_input('Breakfast Description')
-
-    if not breakfast_description:
-        st.warning("Please enter a description for your breakfast.")
-    else:
-        st.warning("Once you enter your prompt and press enter, you will not be able to change it.")
-        prompt_description = st.text_input('Enter your prompt', key="prompt", on_change=lambda: st.session_state.pop("prompt", None))
 
 
 
