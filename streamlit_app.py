@@ -31,9 +31,8 @@ if confirmation and prolific_id:
     if st.button('Submit'):
         st.session_state['prolific_id'] = prolific_id
         st.write("Instructions")
-        # Disable further changes to 'prolific_id' by removing the text input if it's already set
-        if 'prolific_id' in st.session_state:
-            st.text(f"Prolific ID: {st.session_state['prolific_id']} (locked)")
+        # Lock the text input box for 'prolific_id' after it's set
+        st.text_input('Prolific ID', value=prolific_id, disabled=True)
         st.warning("You will not be able to change your Prolific ID after this point.")
         
         st.write("Describe in words the image that comes to your mind when you think of your breakfast in your country")
