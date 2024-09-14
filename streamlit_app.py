@@ -25,6 +25,8 @@ def generate_image(image_description):
 st.title('CC-T2I')
 # st.subheader("Powered by OpenAI and Streamlit")
 
+import streamlit as st
+
 # Initialize session state variables if they don't exist
 if "prolific_id" not in st.session_state:
     st.session_state["prolific_id"] = ""
@@ -34,12 +36,37 @@ if "disable_confirm_id" not in st.session_state:
     st.session_state["disable_confirm_id"] = False
 if "submitted" not in st.session_state:
     st.session_state["submitted"] = False
+if "disable_prompt_input" not in st.session_state:
+    st.session_state["disable_prompt_input"] = False
+if "disable_generate_button" not in st.session_state:
+    st.session_state["disable_generate_button"] = False
+if "image_generated" not in st.session_state:
+    st.session_state["image_generated"] = False
+if "breakfast_description" not in st.session_state:
+    st.session_state["breakfast_description"] = ""
+if "prompt_description" not in st.session_state:
+    st.session_state["prompt_description"] = ""
+if "generated_image" not in st.session_state:
+    st.session_state["generated_image"] = None
 
 # Define the callback function for the Submit button
 def submit_callback():
     st.session_state["disable_prolific_id"] = True
     st.session_state["disable_confirm_id"] = True
     st.session_state["submitted"] = True
+
+# Define the callback function for the Generate Image button
+def generate_image_callback():
+    st.session_state["disable_prompt_input"] = True
+    st.session_state["disable_generate_button"] = True
+    st.session_state["image_generated"] = True
+    # Assume generate_image is a function that returns an image object
+    st.session_state["generated_image"] = generate_image(st.session_state["prompt_description"])
+
+# Placeholder function for image generation
+def generate_image(prompt):
+    # Replace this with your actual image generation logic
+    return f"Generated image based on prompt: {prompt}"
 
 # Text input for Prolific ID
 prolific_id = st.text_input(
@@ -66,20 +93,42 @@ if confirmation and prolific_id:
         st.warning("You will not be able to change your Prolific ID after this point.")
         st.write("Instructions")
 
-
         st.write("Describe in words the image that comes to your mind when you think of your breakfast in your country")
-        breakfast_description = st.text_input('Breakfast Description')
-        
+        # Text input for Breakfast Description
+        breakfast_description = st.text_input(
+            'Breakfast Description',
+            value=st.session_state["breakfast_description"]
+        )
+        st.session_state["breakfast_description"] = breakfast_description
+
         if breakfast_description:
             st.warning("Once you enter your prompt and press enter, you will not be able to change it.")
-            prompt_description = st.text_input('Enter your prompt', key="prompt", on_change=lambda: st.session_state.pop("prompt", None))
-            if st.button('Generate Image'):
-                generated_img = generate_image(prompt_description)
-                st.image(generated_img)
+
+            # Text input for Prompt Description
+            prompt_description = st.text_input(
+                'Enter your prompt',
+                key="prompt",
+                value=st.session_state["prompt_description"],
+                disabled=st.session_state["disable_prompt_input"]
+            )
+            st.session_state["prompt_description"] = prompt_description
+
+            if prompt_description:
+                # Generate Image button with callback
+                st.button(
+                    'Generate Image',
+                    on_click=generate_image_callback,
+                    disabled=st.session_state["disable_generate_button"]
+                )
+
+                if st.session_state["image_generated"]:
+                    # Display the generated image
+                    st.image(st.session_state["generated_image"])
         else:
             st.warning("Please enter a description for your breakfast.")
-    else:
-        st.warning("Please verify your Prolific ID and confirm. Once you submit, you will not be able to change your Prolific ID.")
+else:
+    st.info("Please enter and confirm your Prolific ID to proceed.")
+
 
 
 
