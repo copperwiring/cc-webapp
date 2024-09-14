@@ -25,7 +25,7 @@ def generate_image(image_description):
 st.title('CC-T2I')
 # st.subheader("Powered by OpenAI and Streamlit")
 
-prolific_id = st.text_input('Enter your Prolific ID', disabled=("prolific_id" in st.session_state and st.session_state.get("disable_prolific_id", False) and st.session_state.get("disable_confirm_id", False)))
+prolific_id = st.text_input('Enter your Prolific ID', disabled=("prolific_id" in st.session_state and st.session_state.get("disable_prolific_id", False)))
 
 confirmation = st.checkbox('Is the entered Prolific ID correct? Uncheck the box to edit it.', key="confirm_id", disabled=st.session_state.get("disable_confirm_id", False))
 
