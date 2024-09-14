@@ -26,7 +26,7 @@ st.title('CC-T2I')
 # st.subheader("Powered by OpenAI and Streamlit")
 
 prolific_id = st.text_input('Enter your Prolific ID')
-if st.button('Show Instructions'):
+if st.button('Submit') and prolific_id:
     st.write("Instructions")
 
 
