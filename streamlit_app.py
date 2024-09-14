@@ -8,24 +8,9 @@ st.set_page_config(page_title="DALL.E 3 Image Generation")
 OPENAI_KEY = st.secrets["OPENAI_KEY"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 
-def generate_image(image_description):
-  client = OpenAI(api_key=OPENAI_KEY)
-  response = client.images.generate(
-  model="dall-e-3",
-  prompt=f"{image_description}",
-  size="1024x1024",
-  quality="standard",
-  n=1,
-  )
-
-  img_url = response.data[0].url
-  return img_url
-
 
 st.title('CC-T2I')
 # st.subheader("Powered by OpenAI and Streamlit")
-
-import streamlit as st
 
 # Initialize session state variables if they don't exist
 if "prolific_id" not in st.session_state:
@@ -64,9 +49,21 @@ def generate_image_callback():
     st.session_state["generated_image"] = generate_image(st.session_state["prompt_description"])
 
 
+# def generate_image(image_description):
+#   client = OpenAI(api_key=OPENAI_KEY)
+#   response = client.images.generate(
+#   model="dall-e-3",
+#   prompt=f"{image_description}",
+#   size="1024x1024",
+#   quality="standard",
+#   n=1,
+#   )
+
+#   img_url = response.data[0].url
+#   return img_url
 # Placeholder function for image generation
 def generate_image(prompt):
-    client = OpenAI()
+    client = OpenAI(api_key=OPENAI_KEY)
     response = client.images.generate(
     model="dall-e-3",
     prompt=f"{prompt}",
