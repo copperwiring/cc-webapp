@@ -5,12 +5,8 @@ import streamlit as st
 
 st.set_page_config(page_title="DALL.E 3 Image Generation")
 
-st.title("🎈 My new app here")
-st.write(
-    "Let's start building! For help and inspiration, head over to [docs.streamlit.io](https://docs.streamlit.io/)."
-)
-
 OPENAI_KEY = st.secrets["OPENAI_KEY"]
+SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 
 def generate_image(image_description):
   client = OpenAI(api_key=OPENAI_KEY)
@@ -26,11 +22,22 @@ def generate_image(image_description):
   return img_url
 
 
+st.title('CC-T2I')
+# st.subheader("Powered by OpenAI and Streamlit")
 
-st.title('DALL.E 3 Image Generation')
-st.subheader("Powered by OpenAI and Streamlit")
-img_description = st.text_input('Image Desription')
+prolific_id = st.text_input('Enter your Prolific ID')
+if st.button('Show Instructions'):
+    st.write("Instructions")
 
-if st.button('Generate Image'):
-    generated_img = generate_image(img_description)
-    st.image(generated_img)
+
+
+# img_description = st.text_input('Image Desription')
+
+# if st.button('Generate Image'):
+#     generated_img = generate_image(img_description)
+#     st.image(generated_img)
+
+
+
+
+
