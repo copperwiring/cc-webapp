@@ -26,11 +26,13 @@ st.title('CC-T2I')
 # st.subheader("Powered by OpenAI and Streamlit")
 
 prolific_id = st.text_input('Enter your Prolific ID', disabled=("prolific_id" in st.session_state and st.session_state.get("confirm_id", False)))
-confirmation = st.checkbox('Is the entered Prolific ID correct? Uncheck the box to edit it.', key="confirm_id") 
+confirmation = st.checkbox('Is the entered Prolific ID correct? Uncheck the box to edit it.', key="confirm_id", disabled=st.session_state.get("confirm_id", False))
+
 if confirmation and prolific_id:
     if st.button('Submit'):
         st.session_state['prolific_id'] = prolific_id
-        st.session_state.pop("confirm_id", None)
+        # disable the confirm box which has key="confirm_id"
+        st.session_state["confirm_id"] = True
         st.write("Instructions")
         st.warning("You will not be able to change your Prolific ID after this point.")
         
