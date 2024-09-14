@@ -27,7 +27,12 @@ st.title('CC-T2I')
 
 prolific_id = st.text_input('Enter your Prolific ID')
 if st.button('Submit') and prolific_id:
-    st.write("Instructions")
+    confirmation = st.checkbox('Is the entered Prolific ID correct?')
+    if confirmation:
+        st.write("Instructions")
+        st.warning("You will not be able to change your Prolific ID after this point.")
+    else:
+        st.warning("Please verify your Prolific ID and confirm. Once you confirm, you will not be able to change your Prolific ID.")
 
 st.write("Describe in words the image that comes to your mind when you think of your breakfast in your country")
 breakfast_description = st.text_input('Breakfast Description')
