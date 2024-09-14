@@ -63,10 +63,19 @@ def generate_image_callback():
     # Assume generate_image is a function that returns an image object
     st.session_state["generated_image"] = generate_image(st.session_state["prompt_description"])
 
+
 # Placeholder function for image generation
 def generate_image(prompt):
-    # Replace this with your actual image generation logic
-    return f"Generated image based on prompt: {prompt}"
+    client = OpenAI()
+    response = client.images.generate(
+    model="dall-e-3",
+    prompt=f"{prompt}",
+    size="1024x1024",
+    quality="standard",
+    n=1)
+
+    img_url = response.data[0].url
+    return img_url
 
 # Text input for Prolific ID
 prolific_id = st.text_input(
