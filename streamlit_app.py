@@ -37,18 +37,18 @@ if "disable_breakfast_input" not in st.session_state:
     st.session_state["disable_breakfast_input"] = False
 if "breakfast_submitted" not in st.session_state:
     st.session_state["breakfast_submitted"] = False
-if "disable_prompt_input" not in st.session_state:
-    st.session_state["disable_prompt_input"] = False
-if "disable_generate_button" not in st.session_state:
-    st.session_state["disable_generate_button"] = False
+# if "disable_prompt_input" not in st.session_state:
+#     st.session_state["disable_prompt_input"] = False
+# if "disable_generate_button" not in st.session_state:
+#     st.session_state["disable_generate_button"] = False
 if "image_generated" not in st.session_state:
     st.session_state["image_generated"] = False
 if "breakfast_description" not in st.session_state:
     st.session_state["breakfast_description"] = ""
-# if "prompt_description" not in st.session_state:
-#     st.session_state["prompt_description"] = ""
-# if "generated_image" not in st.session_state:
-#     st.session_state["generated_image"] = None
+if "prompt_description" not in st.session_state:
+    st.session_state["prompt_description"] = ""
+if "generated_image" not in st.session_state:
+    st.session_state["generated_image"] = None
 
 # Define the callback function for the Submit button
 def submit_callback():
