@@ -25,20 +25,42 @@ def generate_image(image_description):
 st.title('CC-T2I')
 # st.subheader("Powered by OpenAI and Streamlit")
 
-prolific_id = st.text_input('Enter your Prolific ID', disabled=("prolific_id" in st.session_state and st.session_state.get("disable_prolific_id", False)))
+import streamlit as st
 
-confirmation = st.checkbox('Is the entered Prolific ID correct? Uncheck the box to edit it.', key="confirm_id", disabled=st.session_state.get("disable_confirm_id", False))
+# Initialize session state variables if they don't exist
+if "prolific_id" not in st.session_state:
+    st.session_state["prolific_id"] = ""
+if "disable_prolific_id" not in st.session_state:
+    st.session_state["disable_prolific_id"] = False
+if "disable_confirm_id" not in st.session_state:
+    st.session_state["disable_confirm_id"] = False
+
+# Text input for Prolific ID
+prolific_id = st.text_input(
+    'Enter your Prolific ID',
+    value=st.session_state["prolific_id"],
+    disabled=st.session_state["disable_prolific_id"]
+)
+
+# Update the Prolific ID in session state
+st.session_state["prolific_id"] = prolific_id
+
+# Checkbox for confirmation
+confirmation = st.checkbox(
+    'Is the entered Prolific ID correct? Uncheck the box to edit it.',
+    key="confirm_id",
+    disabled=st.session_state["disable_confirm_id"]
+)
 
 if confirmation and prolific_id:
     if st.button('Submit'):
-        st.session_state['prolific_id'] = prolific_id
+        st.warning("You will not be able to change your Prolific ID after this point.")
+        # Disable the input fields
         st.session_state["disable_prolific_id"] = True
         st.session_state["disable_confirm_id"] = True
-        prolific_id = st.text_input('Enter your Prolific ID', value=prolific_id, disabled=True)
-        confirmation = st.checkbox('Is the entered Prolific ID correct?', value=True, disabled=True)
+        # Display instructions or proceed to the next step
         st.write("Instructions")
-        st.warning("You will not be able to change your Prolific ID after this point.")
-        
+
         st.write("Describe in words the image that comes to your mind when you think of your breakfast in your country")
         breakfast_description = st.text_input('Breakfast Description')
         
