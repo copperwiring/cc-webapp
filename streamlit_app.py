@@ -25,14 +25,13 @@ def generate_image(image_description):
 st.title('CC-T2I')
 # st.subheader("Powered by OpenAI and Streamlit")
 
-prolific_id = st.text_input('Enter your Prolific ID')
+
+prolific_id = st.text_input('Enter your Prolific ID', disabled=("prolific_id" in st.session_state))
 confirmation = st.checkbox('Is the entered Prolific ID correct?')
 if confirmation and prolific_id:
     if st.button('Submit'):
         st.session_state['prolific_id'] = prolific_id
         st.write("Instructions")
-        # Lock the text input box for 'prolific_id' after it's set
-        st.text_input('Prolific ID', value=prolific_id, disabled=True)
         st.warning("You will not be able to change your Prolific ID after this point.")
         
         st.write("Describe in words the image that comes to your mind when you think of your breakfast in your country")
