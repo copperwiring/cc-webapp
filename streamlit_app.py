@@ -25,8 +25,6 @@ def generate_image(image_description):
 st.title('CC-T2I')
 # st.subheader("Powered by OpenAI and Streamlit")
 
-import streamlit as st
-
 # Initialize session state variables if they don't exist
 if "prolific_id" not in st.session_state:
     st.session_state["prolific_id"] = ""
@@ -34,6 +32,14 @@ if "disable_prolific_id" not in st.session_state:
     st.session_state["disable_prolific_id"] = False
 if "disable_confirm_id" not in st.session_state:
     st.session_state["disable_confirm_id"] = False
+if "submitted" not in st.session_state:
+    st.session_state["submitted"] = False
+
+# Define the callback function for the Submit button
+def submit_callback():
+    st.session_state["disable_prolific_id"] = True
+    st.session_state["disable_confirm_id"] = True
+    st.session_state["submitted"] = True
 
 # Text input for Prolific ID
 prolific_id = st.text_input(
@@ -53,13 +59,13 @@ confirmation = st.checkbox(
 )
 
 if confirmation and prolific_id:
-    if st.button('Submit'):
+    # Use the on_click parameter to set the callback
+    st.button('Submit', on_click=submit_callback)
+
+    if st.session_state["submitted"]:
         st.warning("You will not be able to change your Prolific ID after this point.")
-        # Disable the input fields
-        st.session_state["disable_prolific_id"] = True
-        st.session_state["disable_confirm_id"] = True
-        # Display instructions or proceed to the next step
         st.write("Instructions")
+
 
         st.write("Describe in words the image that comes to your mind when you think of your breakfast in your country")
         breakfast_description = st.text_input('Breakfast Description')
