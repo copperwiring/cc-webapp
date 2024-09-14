@@ -26,9 +26,9 @@ st.title('CC-T2I')
 # st.subheader("Powered by OpenAI and Streamlit")
 
 prolific_id = st.text_input('Enter your Prolific ID')
-if st.button('Submit') and prolific_id:
-    confirmation = st.checkbox('Is the entered Prolific ID correct?')
-    if confirmation:
+confirmation = st.checkbox('Is the entered Prolific ID correct?')
+if confirmation:
+    if st.button('Submit') and prolific_id:
         st.write("Instructions")
         st.warning("You will not be able to change your Prolific ID after this point.")
         
