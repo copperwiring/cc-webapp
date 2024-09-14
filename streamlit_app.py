@@ -73,6 +73,9 @@ if confirmation and prolific_id:
         if breakfast_description:
             st.warning("Once you enter your prompt and press enter, you will not be able to change it.")
             prompt_description = st.text_input('Enter your prompt', key="prompt", on_change=lambda: st.session_state.pop("prompt", None))
+            if st.button('Generate Image'):
+                generated_img = generate_image(prompt_description)
+                st.image(generated_img)
         else:
             st.warning("Please enter a description for your breakfast.")
     else:
