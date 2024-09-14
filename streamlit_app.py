@@ -1,5 +1,5 @@
 import streamlit as st
-import openai
+from openai import OpenAI
 from PIL import Image
 import streamlit as st
 from apikey import apikey
