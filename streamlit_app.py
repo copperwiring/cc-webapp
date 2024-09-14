@@ -32,6 +32,10 @@ if st.button('Submit') and prolific_id:
 st.write("Describe in words the image that comes to your mind when you think of your breakfast in your country")
 breakfast_description = st.text_input('Breakfast Description')
 
+if not breakfast_description:
+    st.warning("Please enter a description for your breakfast.")
+else:
+    prompt_description = st.text_input('Enter your prompt')
 
 
 
