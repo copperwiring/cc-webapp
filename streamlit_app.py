@@ -45,10 +45,10 @@ if "image_generated" not in st.session_state:
     st.session_state["image_generated"] = False
 if "breakfast_description" not in st.session_state:
     st.session_state["breakfast_description"] = ""
-if "prompt_description" not in st.session_state:
-    st.session_state["prompt_description"] = ""
-if "generated_image" not in st.session_state:
-    st.session_state["generated_image"] = None
+# if "prompt_description" not in st.session_state:
+#     st.session_state["prompt_description"] = ""
+# if "generated_image" not in st.session_state:
+#     st.session_state["generated_image"] = None
 
 # Define the callback function for the Submit button
 def submit_callback():
@@ -123,7 +123,7 @@ if confirmation and prolific_id:
                 'Enter your prompt',
                 key="prompt",
                 value=st.session_state["prompt_description"],
-                disabled=st.session_state["disable_prompt_input"]
+                # disabled=st.session_state["disable_prompt_input"]
             )
             st.session_state["prompt_description"] = prompt_description
 
@@ -132,7 +132,7 @@ if confirmation and prolific_id:
                 st.button(
                     'Generate Image',
                     on_click=generate_image_callback,
-                    disabled=st.session_state["disable_generate_button"]
+                    # disabled=st.session_state["disable_generate_button"]
                 )
 
                 if st.session_state["image_generated"]:
