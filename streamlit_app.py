@@ -29,6 +29,7 @@ prolific_id = st.text_input('Enter your Prolific ID')
 confirmation = st.checkbox('Is the entered Prolific ID correct?')
 if confirmation:
     if st.button('Submit') and prolific_id:
+        st.session_state['prolific_id'] = prolific_id
         st.write("Instructions")
         st.warning("You will not be able to change your Prolific ID after this point.")
         
@@ -41,7 +42,7 @@ if confirmation:
         else:
             st.warning("Please enter a description for your breakfast.")
     else:
-        st.warning("Please verify your Prolific ID and confirm. Once you confirm, you will not be able to change your Prolific ID.")
+        st.warning("Please verify your Prolific ID and confirm. Once you submit, you will not be able to change your Prolific ID.")
 
 
 
