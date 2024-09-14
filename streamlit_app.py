@@ -34,8 +34,8 @@ if confirmation and prolific_id:
         st.session_state['prolific_id'] = prolific_id
         st.session_state["disable_prolific_id"] = True
         st.session_state["disable_confirm_id"] = True
-        st.experimental_rerun()
-        # Blurring the text input and checkbox by disabling them permanently after submission
+        # Replaced deprecated experimental_rerun with the new rerun method
+        st.rerun()
         st.text_input('Enter your Prolific ID', value=prolific_id, disabled=True)
         st.checkbox('Is the entered Prolific ID correct?', value=True, disabled=True)
         st.write("Instructions")
