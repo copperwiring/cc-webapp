@@ -11,6 +11,18 @@ SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 
 st.title('CC-T2I')
 # st.subheader("Powered by OpenAI and Streamlit")
+# Your image generation function
+def generate_image(prompt):
+    client = OpenAI(api_key=OPENAI_KEY)
+    response = client.images.generate(
+        model="dall-e-3",
+        prompt=prompt,
+        size="1024x1024",
+        quality="standard",
+        n=1
+    )
+    img_url = response.data[0].url
+    return img_url
 
 # Initialize session state variables if they don't exist
 if "prolific_id" not in st.session_state:
@@ -21,6 +33,10 @@ if "disable_confirm_id" not in st.session_state:
     st.session_state["disable_confirm_id"] = False
 if "submitted" not in st.session_state:
     st.session_state["submitted"] = False
+if "disable_breakfast_input" not in st.session_state:
+    st.session_state["disable_breakfast_input"] = False
+if "breakfast_submitted" not in st.session_state:
+    st.session_state["breakfast_submitted"] = False
 if "disable_prompt_input" not in st.session_state:
     st.session_state["disable_prompt_input"] = False
 if "disable_generate_button" not in st.session_state:
@@ -40,39 +56,20 @@ def submit_callback():
     st.session_state["disable_confirm_id"] = True
     st.session_state["submitted"] = True
 
+# Define the callback function for the Breakfast Description Submit button
+def submit_breakfast_callback():
+    st.session_state["disable_breakfast_input"] = True
+    st.session_state["breakfast_submitted"] = True
+
 # Define the callback function for the Generate Image button
 def generate_image_callback():
     st.session_state["disable_prompt_input"] = True
     st.session_state["disable_generate_button"] = True
     st.session_state["image_generated"] = True
-    # Assume generate_image is a function that returns an image object
+    # Use your actual image generation logic here
     st.session_state["generated_image"] = generate_image(st.session_state["prompt_description"])
 
 
-# def generate_image(image_description):
-#   client = OpenAI(api_key=OPENAI_KEY)
-#   response = client.images.generate(
-#   model="dall-e-3",
-#   prompt=f"{image_description}",
-#   size="1024x1024",
-#   quality="standard",
-#   n=1,
-#   )
-
-#   img_url = response.data[0].url
-#   return img_url
-# Placeholder function for image generation
-def generate_image(prompt):
-    client = OpenAI(api_key=OPENAI_KEY)
-    response = client.images.generate(
-    model="dall-e-3",
-    prompt=f"{prompt}",
-    size="1024x1024",
-    quality="standard",
-    n=1)
-
-    img_url = response.data[0].url
-    return img_url
 
 # Text input for Prolific ID
 prolific_id = st.text_input(
@@ -100,14 +97,25 @@ if confirmation and prolific_id:
         st.write("Instructions")
 
         st.write("Describe in words the image that comes to your mind when you think of your breakfast in your country")
+        
         # Text input for Breakfast Description
         breakfast_description = st.text_input(
             'Breakfast Description',
-            value=st.session_state["breakfast_description"]
+            value=st.session_state["breakfast_description"],
+            disabled=st.session_state["disable_breakfast_input"]
         )
         st.session_state["breakfast_description"] = breakfast_description
 
-        if breakfast_description:
+        if not st.session_state["breakfast_submitted"]:
+            if breakfast_description:
+                st.warning("Once you submit your breakfast description, you will not be able to change it.")
+                # Submit button for Breakfast Description
+                st.button('Submit Breakfast Description', on_click=submit_breakfast_callback)
+        else:
+            st.info("Breakfast description submitted and cannot be changed.")
+
+        # Proceed only if breakfast description is submitted
+        if st.session_state["breakfast_submitted"]:
             st.warning("Once you enter your prompt and press enter, you will not be able to change it.")
 
             # Text input for Prompt Description
@@ -130,21 +138,5 @@ if confirmation and prolific_id:
                 if st.session_state["image_generated"]:
                     # Display the generated image
                     st.image(st.session_state["generated_image"])
-        else:
-            st.warning("Please enter a description for your breakfast.")
 else:
     st.info("Please enter and confirm your Prolific ID to proceed.")
-
-
-
-
-# img_description = st.text_input('Image Desription')
-
-# if st.button('Generate Image'):
-#     generated_img = generate_image(img_description)
-#     st.image(generated_img)
-
-
-
-
-
