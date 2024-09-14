@@ -31,7 +31,7 @@ confirmation = st.checkbox('Is the entered Prolific ID correct? Uncheck the box 
 
 if confirmation and prolific_id:
     if st.button('Submit'):
-        # st.session_state['prolific_id'] = prolific_id
+        st.session_state['prolific_id'] = prolific_id
         # st.session_state["disable_prolific_id"] = True
         # st.session_state["disable_confirm_id"] = True
         st.rerun()
