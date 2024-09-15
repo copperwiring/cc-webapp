@@ -42,7 +42,7 @@ def generate_image(prompt):
 
 
     data = [{
-        "proflic_id": st.session_state["prolific_id"],
+        "prolific_id": st.session_state["prolific_id"],
         "prompt": prompt,
         "image_name": image_path_on_supastorage,
         "satisfaction": 0,
@@ -51,7 +51,7 @@ def generate_image(prompt):
 
     supabase_table_response = (
         supabase.table("cc-t2i-test-attempts")
-        .upsert({"proflic_id": st.session_state["prolific_id"], "data": data})
+        .upsert({"prolific_id": st.session_state["prolific_id"], "data": data})
         .execute()
     )
     st.write(supabase_table_response)
