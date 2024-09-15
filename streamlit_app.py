@@ -108,9 +108,7 @@ if confirmation and prolific_id:
         breakfast_description = st.text_area(
             'Enter your description here',
             value=st.session_state["breakfast_description"],
-            disabled=st.session_state["disable_breakfast_input"],
-            on_change=onchange_breakfast_description_callback,
-        )
+            disabled=st.session_state["disable_breakfast_input"]        )
         st.session_state["breakfast_description"] = breakfast_description
 
         if st.session_state["breakfast_submit_show"] and breakfast_description:
