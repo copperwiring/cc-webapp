@@ -17,7 +17,7 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 # st.write(res)
 
 st.title('CC-T2I')
-
+flag = False
 # Your image generation function
 def generate_image(prompt):
     client = OpenAI(api_key=OPENAI_KEY)
@@ -176,18 +176,20 @@ if confirmation and prolific_id:
                 if st.session_state["image_generated"]:
                     # Display the generated image
                     st.image(st.session_state["generated_image"])
+                    flag = True
                     # st.write("Image generated successfully!")
 
-                # Add slider for satisfaction
-                st.info("0: Not satisfied, 5: No strong feelings, 10: Very satisfied")
-                satisfaction = st.slider("How satisfied are you with the generated image?", 0, 10, 5)
-                #Allow user to enter comments
-                comments = st.text_area("Any comments on the satisfaction of the generated image?. (Optional)")
+                if flag:
+                    # Add slider for satisfaction
+                    st.info("0: Not satisfied, 5: No strong feelings, 10: Very satisfied")
+                    satisfaction = st.slider("How satisfied are you with the generated image?", 0, 10, 5)
+                    #Allow user to enter comments
+                    comments = st.text_area("Any comments on the satisfaction of the generated image?. (Optional)")
 
-                # Add slider for appropriateness
-                st.info("0: Absolutely not appropriate, 5: Could be appropriate in some contexts but also not appropriate in others, 10: Absolutely appropriate")
-                appropriateness = st.slider("How appropriate is the generated image for the prompt?", 0, 10, 5)
-                #Allow user to enter comments
-                comments = st.text_area("Any comments on the appropriateness of the generated image?. (Optional)")
+                    # Add slider for appropriateness
+                    st.info("0: Absolutely not appropriate, 5: Could be appropriate in some contexts but also not appropriate in others, 10: Absolutely appropriate")
+                    appropriateness = st.slider("How appropriate is the generated image for the prompt?", 0, 10, 5)
+                    #Allow user to enter comments
+                    comments = st.text_area("Any comments on the appropriateness of the generated image?. (Optional)")
 else:
     st.info("Please enter and confirm your Prolific ID to proceed.")
