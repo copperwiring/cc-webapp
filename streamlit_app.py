@@ -111,7 +111,7 @@ if confirmation and prolific_id:
             disabled=st.session_state["disable_breakfast_input"]        )
         st.session_state["breakfast_description"] = breakfast_description
 
-        if st.session_state["breakfast_submit_show"] and breakfast_description:
+        if breakfast_description:
             st.warning("Once you submit your breakfast description, you will not be able to change it.")
             # Submit button for Breakfast Description
             st.button('Submit Breakfast Description', on_click=submit_breakfast_callback, disabled= ~st.session_state["breakfast_submitted"])
