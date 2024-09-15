@@ -3,6 +3,7 @@ from openai import OpenAI
 from PIL import Image
 import streamlit as st
 from supabase import create_client, Client
+import base64
 
 
 st.set_page_config(page_title="T2I Image Generation")
@@ -25,23 +26,26 @@ def generate_image(prompt):
         prompt=prompt,
         size="1024x1024",
         quality="standard",
+        response_format="b64_json",
         n=1
     )
-    img_url = response.data[0].url
 
-    # with open(filepath, 'rb') as f:
-    #     supabase.storage.from_("testbucket").upload(file=f,path=path_on_supastorage, file_options={"content-type": "audio/mpeg"})
+
+    img_b64 = response.data[0].b64
+    bytes_decoded = base64.b64decode(img_b64)
+    image_path_on_supastorage = "images/" + st.session_state["prolific_id"] + ".jpg" 
+    supabase.storage.from_("testbucket").upload(file=bytes_decoded,path=image_path_on_supastorage, file_options={"content-type": "image/jpeg"})
 
     data = {
         "proflic_id": st.session_state["prolific_id"],
         "prompt": prompt,
-        "image_url": img_url,
+        "image_name": image_path_on_supastorage,
         "satisfaction": 0,
         "appropriateness": 0
     }
-    st.write(response.data[0])
+    st.write(response.data)
     
-    return img_url
+    return "img_url"
 
 # Initialize session state variables if they don't exist
 if "prolific_id" not in st.session_state:
