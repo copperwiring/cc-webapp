@@ -12,7 +12,7 @@ SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 SUPABASE_URL = st.secrets["SUPABASE_URL"]   
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)    
-res = supabase.storage.create_bucket("images")
+# res = supabase.storage.create_bucket("images")
 # st.write(res)
 
 st.title('CC-T2I')
@@ -29,6 +29,8 @@ def generate_image(prompt):
     )
     img_url = response.data[0].url
 
+    # with open(filepath, 'rb') as f:
+    #     supabase.storage.from_("testbucket").upload(file=f,path=path_on_supastorage, file_options={"content-type": "audio/mpeg"})
 
     data = {
         "proflic_id": st.session_state["prolific_id"],
@@ -37,6 +39,7 @@ def generate_image(prompt):
         "satisfaction": 0,
         "appropriateness": 0
     }
+    st.write(response.data[0])
     
     return img_url
 
