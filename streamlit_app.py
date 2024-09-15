@@ -177,5 +177,17 @@ if confirmation and prolific_id:
                     # Display the generated image
                     st.image(st.session_state["generated_image"])
                     # st.write("Image generated successfully!")
+
+                # Add slider for satisfaction
+                st.info("0: Not satisfied, 5: No strong feelings, 10: Very satisfied")
+                satisfaction = st.slider("How satisfied are you with the generated image?", 0, 10, 5)
+                #Allow user to enter comments
+                comments = st.text_area("Any comments on the satisfaction of the generated image?. (Optional)")
+
+                # Add slider for appropriateness
+                st.info("0: Absolutely not appropriate, 5: Could be appropriate in some contexts but also not appropriate in others, 10: Absolutely appropriate")
+                appropriateness = st.slider("How appropriate is the generated image for the prompt?", 0, 10, 5)
+                #Allow user to enter comments
+                comments = st.text_area("Any comments on the appropriateness of the generated image?. (Optional)")
 else:
     st.info("Please enter and confirm your Prolific ID to proceed.")
