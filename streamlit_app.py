@@ -52,7 +52,7 @@ def generate_image(prompt):
         .upsert({"prolific_id": st.session_state["prolific_id"], "data": data})
         .execute()
     )
-    st.write(supabase_table_response)
+    # st.write(supabase_table_response)
     
     return db_image_url
 
