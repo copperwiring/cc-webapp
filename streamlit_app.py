@@ -19,43 +19,42 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 st.title('CC-T2I')
 
 # Your image generation function
-with st.spinner("Loading..."):
-    def generate_image(prompt):
-        client = OpenAI(api_key=OPENAI_KEY)
-        response = client.images.generate(
-            model="dall-e-3",
-            prompt=prompt,
-            size="1024x1024",
-            quality="standard",
-            response_format="b64_json",
-            n=1
-        )
+def generate_image(prompt):
+    client = OpenAI(api_key=OPENAI_KEY)
+    response = client.images.generate(
+        model="dall-e-3",
+        prompt=prompt,
+        size="1024x1024",
+        quality="standard",
+        response_format="b64_json",
+        n=1
+    )
 
-        img_b64 = response.data[0].b64_json
-        bytes_decoded = base64.b64decode(img_b64)
-        image_path_on_supastorage = st.session_state["prolific_id"] + "/1.jpg" 
-        bucket_name = "images"
-        supabase.storage.from_(bucket_name).upload(file=bytes_decoded,path=image_path_on_supastorage, file_options={"content-type": "image/jpeg"})
-        db_image_url = supabase.storage.from_(bucket_name).get_public_url(image_path_on_supastorage)
-        st.write(db_image_url)
+    img_b64 = response.data[0].b64_json
+    bytes_decoded = base64.b64decode(img_b64)
+    image_path_on_supastorage = st.session_state["prolific_id"] + "/1.jpg" 
+    bucket_name = "images"
+    supabase.storage.from_(bucket_name).upload(file=bytes_decoded,path=image_path_on_supastorage, file_options={"content-type": "image/jpeg"})
+    db_image_url = supabase.storage.from_(bucket_name).get_public_url(image_path_on_supastorage)
+    st.write(db_image_url)
 
 
-        data = [{
-            "prolific_id": st.session_state["prolific_id"],
-            "prompt": prompt,
-            "image_name": image_path_on_supastorage,
-            "satisfaction": 0,
-            "appropriateness": 0
-        }]
+    data = [{
+        "prolific_id": st.session_state["prolific_id"],
+        "prompt": prompt,
+        "image_name": image_path_on_supastorage,
+        "satisfaction": 0,
+        "appropriateness": 0
+    }]
 
-        supabase_table_response = (
-            supabase.table("cc-t2i-test-attempts")
-            .upsert({"prolific_id": st.session_state["prolific_id"], "data": data})
-            .execute()
-        )
-        st.write(supabase_table_response)
-        
-        return db_image_url
+    supabase_table_response = (
+        supabase.table("cc-t2i-test-attempts")
+        .upsert({"prolific_id": st.session_state["prolific_id"], "data": data})
+        .execute()
+    )
+    st.write(supabase_table_response)
+    
+    return db_image_url
 
 # Initialize session state variables if they don't exist
 if "prolific_id" not in st.session_state:
@@ -173,6 +172,8 @@ if confirmation and prolific_id:
                     # disabled=st.session_state["disable_generate_button"]
                 )
 
+                while st.spinner("Generating image...Please wait."):
+                    pass
                 if st.session_state["image_generated"]:
                     # Display the generated image
                     st.image(st.session_state["generated_image"])
