@@ -10,7 +10,7 @@ SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 
 
 st.title('CC-T2I')
-# st.subheader("Powered by OpenAI and Streamlit")
+
 # Your image generation function
 def generate_image(prompt):
     client = OpenAI(api_key=OPENAI_KEY)
@@ -37,18 +37,15 @@ if "disable_breakfast_input" not in st.session_state:
     st.session_state["disable_breakfast_input"] = False
 if "breakfast_submitted" not in st.session_state:
     st.session_state["breakfast_submitted"] = False
-# if "disable_prompt_input" not in st.session_state:
-#     st.session_state["disable_prompt_input"] = False
-# if "disable_generate_button" not in st.session_state:
-#     st.session_state["disable_generate_button"] = False
-if "image_generated" not in st.session_state:
-    st.session_state["image_generated"] = False
 if "breakfast_description" not in st.session_state:
     st.session_state["breakfast_description"] = ""
+if "image_generated" not in st.session_state:
+    st.session_state["image_generated"] = False
 if "prompt_description" not in st.session_state:
     st.session_state["prompt_description"] = ""
 if "generated_image" not in st.session_state:
     st.session_state["generated_image"] = None
+
 
 # Define the callback function for the Submit button
 def submit_callback():
@@ -70,7 +67,6 @@ def generate_image_callback():
     st.session_state["generated_image"] = generate_image(st.session_state["prompt_description"])
 
 
-
 # Text input for Prolific ID
 prolific_id = st.text_input(
     'Enter your Prolific ID',
@@ -83,7 +79,7 @@ st.session_state["prolific_id"] = prolific_id
 
 # Checkbox for confirmation
 confirmation = st.checkbox(
-    'Is the entered Prolific ID correct? Uncheck the box to edit it.',
+    'Continue with Profilic ID? You can not change it later',
     key="confirm_id",
     disabled=st.session_state["disable_confirm_id"]
 )
