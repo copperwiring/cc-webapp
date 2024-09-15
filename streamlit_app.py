@@ -3,6 +3,7 @@ from openai import OpenAI
 from PIL import Image
 import streamlit as st
 
+
 st.set_page_config(page_title="DALL.E 3 Image Generation")
 
 OPENAI_KEY = st.secrets["OPENAI_KEY"]
@@ -22,6 +23,19 @@ def generate_image(prompt):
         n=1
     )
     img_url = response.data[0].url
+
+    # supabase upload image
+    # supabase = Supabase(SUPABASE_KEY)
+    # supabase.upload_image(img_url)
+
+    data = {
+        "proflic_id": st.session_state["prolific_id"],
+        "prompt": prompt,
+        "image_url": img_url,
+        "satisfaction": 0,
+        "appropriateness": 0
+    }
+    
     return img_url
 
 # Initialize session state variables if they don't exist
@@ -114,7 +128,7 @@ if confirmation and prolific_id:
         if breakfast_description:
             st.warning("Once you submit your breakfast description, you will not be able to change it.")
             # Submit button for Breakfast Description
-            st.button('Submit Breakfast Description', on_click=submit_breakfast_callback, disabled= st.session_state["breakfast_submitted"])
+            st.button('Submit Breakfast Description', on_click=submit_breakfast_callback, disabled=st.session_state["breakfast_submitted"])
         else:
             st.info("Breakfast description submitted and cannot be changed.")
 
