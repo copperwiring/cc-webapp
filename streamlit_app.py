@@ -2,13 +2,16 @@ import streamlit as st
 from openai import OpenAI
 from PIL import Image
 import streamlit as st
+from supabase import create_client, Client
 
 
-st.set_page_config(page_title="DALL.E 3 Image Generation")
+st.set_page_config(page_title="T2I Image Generation")
 
 OPENAI_KEY = st.secrets["OPENAI_KEY"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
+SUPABASE_URL = st.secrets["SUPABASE_URL"]   
 
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 st.title('CC-T2I')
 
@@ -24,9 +27,9 @@ def generate_image(prompt):
     )
     img_url = response.data[0].url
 
-    # supabase upload image
-    # supabase = Supabase(SUPABASE_KEY)
-    # supabase.upload_image(img_url)
+
+
+
 
     data = {
         "proflic_id": st.session_state["prolific_id"],
@@ -71,6 +74,9 @@ def submit_callback():
     st.session_state["disable_confirm_id"] = True
     st.session_state["submitted"] = True
     st.session_state["disable_submit_button"] = True
+    res = supabase.storage.create_bucket(name=st.session_state["prolific_id"])
+    st.write(res)
+
 
 # Define the callback function for the Breakfast Description Submit button
 def submit_breakfast_callback():
