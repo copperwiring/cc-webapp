@@ -36,7 +36,7 @@ def generate_image(prompt):
     bucket_name = "images"
     supabase.storage.from_(bucket_name).upload(file=bytes_decoded,path=image_path_on_supastorage, file_options={"content-type": "image/jpeg"})
     db_image_url = supabase.storage.from_(bucket_name).get_public_url(image_path_on_supastorage)
-    st.write(db_image_url)
+    # st.write(db_image_url)
 
 
     data = [{
