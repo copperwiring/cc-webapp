@@ -31,7 +31,7 @@ def generate_image(prompt):
     )
 
 
-    img_b64 = response.data[0].b64
+    img_b64 = response.data[0].b64_json
     bytes_decoded = base64.b64decode(img_b64)
     image_path_on_supastorage = "images/" + st.session_state["prolific_id"] + ".jpg" 
     supabase.storage.from_("testbucket").upload(file=bytes_decoded,path=image_path_on_supastorage, file_options={"content-type": "image/jpeg"})
@@ -165,6 +165,7 @@ if confirmation and prolific_id:
 
                 if st.session_state["image_generated"]:
                     # Display the generated image
-                    st.image(st.session_state["generated_image"])
+                    # st.image(st.session_state["generated_image"])
+                    st.write("Image generated successfully!")
 else:
     st.info("Please enter and confirm your Prolific ID to proceed.")
