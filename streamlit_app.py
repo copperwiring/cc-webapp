@@ -34,7 +34,7 @@ def generate_image(prompt):
     img_b64 = response.data[0].b64_json
     bytes_decoded = base64.b64decode(img_b64)
     image_path_on_supastorage = "images/" + st.session_state["prolific_id"] + ".jpg" 
-    supabase.storage.from_("testbucket").upload(file=bytes_decoded,path=image_path_on_supastorage, file_options={"content-type": "image/jpeg"})
+    supabase.storage.from_("images").upload(file=bytes_decoded,path=image_path_on_supastorage, file_options={"content-type": "image/jpeg"})
 
     data = {
         "proflic_id": st.session_state["prolific_id"],
