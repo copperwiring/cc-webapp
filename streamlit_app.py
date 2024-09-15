@@ -63,8 +63,8 @@ def submit_breakfast_callback():
     st.session_state["disable_breakfast_input"] = True
     st.session_state["breakfast_submitted"] = True
 
-def onchange_breakfast_description_callback():
-    if len(st.session_state["breakfast_description"]) > 10:
+def onchange_breakfast_description_callback(value):
+    if len(value) > 10:
         st.session_state["breakfast_submit_show"] = True
 
 # Define the callback function for the Generate Image button
