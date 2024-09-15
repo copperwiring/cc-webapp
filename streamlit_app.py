@@ -172,12 +172,12 @@ if confirmation and prolific_id:
                     # disabled=st.session_state["disable_generate_button"]
                 )
 
-                st.spinner("Generating image...Please wait.")
+                # st.spinner("Generating image...Please wait.")
                 if st.session_state["image_generated"]:
                     # Display the generated image
                     st.image(st.session_state["generated_image"])
                     # flag = True
-                    # st.write("Image generated successfully!")
+                    st.write("Image generated successfully!")
 
                 # if flag:
                 #     # Add slider for satisfaction
