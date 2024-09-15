@@ -74,7 +74,7 @@ def submit_callback():
     st.session_state["disable_confirm_id"] = True
     st.session_state["submitted"] = True
     st.session_state["disable_submit_button"] = True
-    res = supabase.storage.create_bucket(name=st.session_state["prolific_id"])
+    res = supabase.storage.create_bucket(st.session_state["prolific_id"])
     st.write(res)
 
 
