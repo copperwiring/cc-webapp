@@ -41,6 +41,8 @@ if "breakfast_submitted" not in st.session_state:
     st.session_state["breakfast_submitted"] = False
 if "breakfast_description" not in st.session_state:
     st.session_state["breakfast_description"] = ""
+if "breakfast_submit_show" not in st.session_state:
+    st.session_state["breakfast_submit_show"] = False
 if "image_generated" not in st.session_state:
     st.session_state["image_generated"] = False
 if "prompt_description" not in st.session_state:
@@ -61,6 +63,10 @@ def submit_breakfast_callback():
     st.session_state["disable_breakfast_input"] = True
     st.session_state["breakfast_submitted"] = True
 
+def onchange_breakfast_description_callback():
+    if len(st.session_state["breakfast_description"]) > 10:
+        st.session_state["breakfast_submit_show"] = True
+
 # Define the callback function for the Generate Image button
 def generate_image_callback():
     st.session_state["disable_prompt_input"] = True
@@ -68,6 +74,7 @@ def generate_image_callback():
     st.session_state["image_generated"] = True
     # Use your actual image generation logic here
     st.session_state["generated_image"] = generate_image(st.session_state["prompt_description"])
+
 
 
 # Text input for Prolific ID
@@ -101,19 +108,17 @@ if confirmation and prolific_id:
         breakfast_description = st.text_area(
             'Enter your description here',
             value=st.session_state["breakfast_description"],
-            disabled=st.session_state["disable_breakfast_input"]
+            disabled=st.session_state["disable_breakfast_input"],
+            on_change=onchange_breakfast_description_callback,
         )
         st.session_state["breakfast_description"] = breakfast_description
 
-        # if not st.session_state["breakfast_submitted"]:
-
-        if len(breakfast_description) > 10:
-            if breakfast_description:
-                st.warning("Once you submit your breakfast description, you will not be able to change it.")
-                # Submit button for Breakfast Description
-                st.button('Submit Breakfast Description', on_click=submit_breakfast_callback)
-            else:
-                st.info("Breakfast description submitted and cannot be changed.")
+        if st.session_state["breakfast_submit_show"] and breakfast_description:
+            st.warning("Once you submit your breakfast description, you will not be able to change it.")
+            # Submit button for Breakfast Description
+            st.button('Submit Breakfast Description', on_click=submit_breakfast_callback, disabled= ~st.session_state["breakfast_submitted"])
+        else:
+            st.info("Breakfast description submitted and cannot be changed.")
 
         # Proceed only if breakfast description is submitted
         if st.session_state["breakfast_submitted"]:
