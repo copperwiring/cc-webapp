@@ -30,9 +30,6 @@ def generate_image(prompt):
     img_url = response.data[0].url
 
 
-
-
-
     data = {
         "proflic_id": st.session_state["prolific_id"],
         "prompt": prompt,
