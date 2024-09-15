@@ -31,10 +31,15 @@ def generate_image(prompt):
     )
 
 
+
     img_b64 = response.data[0].b64_json
     bytes_decoded = base64.b64decode(img_b64)
-    image_path_on_supastorage = "images/" + st.session_state["prolific_id"] + ".jpg" 
-    supabase.storage.from_("images").upload(file=bytes_decoded,path=image_path_on_supastorage, file_options={"content-type": "image/jpeg"})
+    image_path_on_supastorage = st.session_state["prolific_id"] + "/1.jpg" 
+    bucket_name = "images"
+    supabase.storage.from_(bucket_name).upload(file=bytes_decoded,path=image_path_on_supastorage, file_options={"content-type": "image/jpeg"})
+    db_image_url = supabase.storage.from_(bucket_name).get_public_url(image_path_on_supastorage)
+    st.write(db_image_url)
+
 
     data = {
         "proflic_id": st.session_state["prolific_id"],
@@ -45,7 +50,7 @@ def generate_image(prompt):
     }
     st.write(response.data)
     
-    return "img_url"
+    return db_image_url
 
 # Initialize session state variables if they don't exist
 if "prolific_id" not in st.session_state:
@@ -165,7 +170,7 @@ if confirmation and prolific_id:
 
                 if st.session_state["image_generated"]:
                     # Display the generated image
-                    # st.image(st.session_state["generated_image"])
-                    st.write("Image generated successfully!")
+                    st.image(st.session_state["generated_image"])
+                    # st.write("Image generated successfully!")
 else:
     st.info("Please enter and confirm your Prolific ID to proceed.")
