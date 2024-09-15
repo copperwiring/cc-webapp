@@ -5,6 +5,8 @@ import streamlit as st
 from supabase import create_client, Client
 import base64
 
+st.cache_data.clear()
+st.cache_resource.clear()
 
 st.set_page_config(page_title="T2I Image Generation")
 
@@ -36,7 +38,6 @@ def generate_image(prompt):
     bucket_name = "images"
     supabase.storage.from_(bucket_name).upload(file=bytes_decoded,path=image_path_on_supastorage, file_options={"content-type": "image/jpeg"})
     db_image_url = supabase.storage.from_(bucket_name).get_public_url(image_path_on_supastorage)
-    # st.write(db_image_url)
 
 
     data = [{
@@ -52,7 +53,6 @@ def generate_image(prompt):
         .upsert({"prolific_id": st.session_state["prolific_id"], "data": data})
         .execute()
     )
-    # st.write(supabase_table_response)
     
     return db_image_url
 
