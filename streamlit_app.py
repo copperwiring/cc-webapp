@@ -105,13 +105,15 @@ if confirmation and prolific_id:
         )
         st.session_state["breakfast_description"] = breakfast_description
 
-        if not st.session_state["breakfast_submitted"]:
+        # if not st.session_state["breakfast_submitted"]:
+
+        if len(breakfast_description) > 10:
             if breakfast_description:
                 st.warning("Once you submit your breakfast description, you will not be able to change it.")
                 # Submit button for Breakfast Description
                 st.button('Submit Breakfast Description', on_click=submit_breakfast_callback)
-        else:
-            st.info("Breakfast description submitted and cannot be changed.")
+            else:
+                st.info("Breakfast description submitted and cannot be changed.")
 
         # Proceed only if breakfast description is submitted
         if st.session_state["breakfast_submitted"]:
