@@ -95,11 +95,11 @@ if confirmation and prolific_id:
         st.warning("You will not be able to change your Prolific ID after this point.")
         st.write("Instructions")
 
-        st.write("Describe in words the image that comes to your mind when you think of your breakfast in your country")
+        st.write("Write some keywords that describe your breakfast in your country. For example: shot of espresso, croissant, orange juice, reading the newspaper, etc.")
         
         # Text input for Breakfast Description
-        breakfast_description = st.text_input(
-            'Breakfast Description',
+        breakfast_description = st.text_area(
+            'Enter your description here',
             value=st.session_state["breakfast_description"],
             disabled=st.session_state["disable_breakfast_input"]
         )
