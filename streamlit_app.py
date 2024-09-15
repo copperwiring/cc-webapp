@@ -11,7 +11,9 @@ OPENAI_KEY = st.secrets["OPENAI_KEY"]
 SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 SUPABASE_URL = st.secrets["SUPABASE_URL"]   
 
-supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
+supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)    
+res = supabase.storage.create_bucket("images")
+# st.write(res)
 
 st.title('CC-T2I')
 
@@ -74,8 +76,6 @@ def submit_callback():
     st.session_state["disable_confirm_id"] = True
     st.session_state["submitted"] = True
     st.session_state["disable_submit_button"] = True
-    res = supabase.storage.create_bucket(st.session_state["prolific_id"])
-    st.write(res)
 
 
 # Define the callback function for the Breakfast Description Submit button
