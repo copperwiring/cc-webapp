@@ -114,7 +114,7 @@ if confirmation and prolific_id:
         if breakfast_description:
             st.warning("Once you submit your breakfast description, you will not be able to change it.")
             # Submit button for Breakfast Description
-            st.button('Submit Breakfast Description', on_click=submit_breakfast_callback, disabled= ~st.session_state["breakfast_submitted"])
+            st.button('Submit Breakfast Description', on_click=submit_breakfast_callback, disabled= st.session_state["breakfast_submitted"])
         else:
             st.info("Breakfast description submitted and cannot be changed.")
 
