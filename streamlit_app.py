@@ -23,12 +23,6 @@ st.title('Culture Specific Image Generation Task')
 score_mappings = {"👍": "thumbs_up", "👎": "thumbs_down"}
 def _submit_feedback(feedback, scores):
     score = scores.get(feedback["score"])
-    st.write(f"Feedback", score)
-
-    if score == "thumbs_up":
-        st.write("thumbs up")
-    elif score == "thumbs_down":
-        st.write("thumbs down")
 
     return score
 
