@@ -119,6 +119,10 @@ if "openai_revised_prompts" not in st.session_state:
 if "imgurls" not in st.session_state:
     st.session_state["imgurls"] = [None] * 10
 
+# success message
+if "success_message" not in st.session_state:
+    st.session_state["success_message"] = False
+
 
 # Define the callback function for the Submit button
 def submit_callback():
@@ -281,8 +285,8 @@ if confirmation and prolific_id:
                                 "openai_revised_prompt": openai_revised_prompt,
                             })
 
-
                         def finalsubmit_response():
+                            st.session_state["success_message"] = True
                             data = {
                             "prolific_id": st.session_state["prolific_id"],
                             "breakfast_description_txt": st.session_state["breakfast_description_txt"],
@@ -298,6 +302,12 @@ if confirmation and prolific_id:
                                 .execute()
                             )
 
-                        st.button('Submit Response', on_click=finalsubmit_response)
+                        st.button('Submit Response', on_click=finalsubmit_response, disabled = st.session_state["success_message"])
+                        st.warning("Please click the submit button to submit your response. Once you submit, you will not be able to change your response.")
+                        # Add: Response submitted successfully message
+                        if st.session_state["success_message"]:
+                            st.success("Response submitted successfully! Thank you for your participation.")
+                            st.stop()
+
 else:
     st.info("Please enter and confirm your Prolific ID to proceed.")
