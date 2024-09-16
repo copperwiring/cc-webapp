@@ -209,6 +209,7 @@ if confirmation and prolific_id:
                     on_click=generate_image_callback,
                     # disabled=st.session_state["disable_generate_button"]
                 )
+                st.warning("Please wait for the image to load. It may take a few seconds.")
 
                 # st.spinner("Generating image...Please wait.")
                 if st.session_state["image_generated"]:
@@ -245,9 +246,9 @@ if confirmation and prolific_id:
                 st.warning("Only select the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. If you are not satisfied, please select thumbs down and edit your prompt.")
 
 
-                if option == "thumbs_down":
+                if option == "👍":
                     st.write("Please update/edit the prompt as needed and click on the 'Generate Image' button again.")
-                elif option == "thumbs_up":
+                elif option == "👎":
                     st.session_state["enable_feedback"] = True
 
                     feedback_text = st.text_area("Please provide feedback on the generated image", height=100)
@@ -259,7 +260,7 @@ if confirmation and prolific_id:
 
                     # Draw a line
                     st.markdown("---"*20)
-                    
+
 
                     # Add slider for appropriateness
                     appropriateness = st.slider("How appropriate is the generated image for the prompt?", 0, 10, 5)
