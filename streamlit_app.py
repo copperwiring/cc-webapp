@@ -26,9 +26,10 @@ st.markdown("---"*20)
 # Write instructions numbered list
 st.write("Instructions")
 st.write("1. Browser compatibility: This task is best done on Chrome or Edge.")
-st.write("2. Since this task involves writing text in native language, please use a keyboard that supports your native language OR use your mobile phone")
-st.write("3. Do not forget to write your Prolific ID in the first step and make sure to confirm it. Once you confirm it, you will not be able to change it.")
-st.write("4. There is no word limit in the text input fields. You can write as much as you want.")
+st.write("2. Please disable VPN as it may give HTTPS errors.")
+st.write("3. Since this task involves writing text in native language, please use a keyboard that supports your native language OR use your mobile phone")
+st.write("4. Do not forget to write your Prolific ID in the first step and make sure to confirm it. Once you confirm it, you will not be able to change it.")
+st.write("5. There is no word limit in the text input fields. You can write as much as you want.")
 st.markdown("---"*20)
 
 
