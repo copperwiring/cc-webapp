@@ -21,7 +21,7 @@ st.title('Culture Specific Image Generation Task')
 
 score_mappings = {"👍": "thumbs_up", "👎": "thumbs_down"}
 feedback = streamlit_feedback(feedback_type="thumbs",
-                              score_mappings=score_mappings)
+                              kwargs={"score_mappings": score_mappings})
 st.write(feedback)
 
 st.markdown("---"*20)
