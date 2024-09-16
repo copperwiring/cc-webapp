@@ -20,22 +20,25 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 st.title('Culture Specific Image Generation Task')
 
 
+score_mappings = {"👍": "thumbs_up", "👎": "thumbs_down"}
 def _submit_feedback(feedback, scores):
     score = scores.get(feedback["score"])
     st.write(f"Feedback", score)
+
+    if score == "thumbs_up":
+        st.write("thumbs up")
+    elif score == "thumbs_down":
+        st.write("thumbs down")
+
     return score
 
-score_mappings = {"👍": 1, "👎": 0}
+
 feedback = streamlit_feedback(feedback_type="thumbs", 
                               on_submit=_submit_feedback, 
                               kwargs={
                                   'scores': score_mappings,
                               })
 
-if feedback == "1":
-    st.write("You clicked thumbs up!")
-else:
-    st.write("You clicked !")
 
 st.markdown("---"*20)
 # Write instructions numbered list
