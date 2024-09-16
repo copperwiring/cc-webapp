@@ -34,6 +34,8 @@ feedback = streamlit_feedback(feedback_type="thumbs",
 
 if feedback == "1":
     st.write("You clicked thumbs up!")
+else:
+    st.write("You clicked !")
 
 st.markdown("---"*20)
 # Write instructions numbered list
