@@ -228,14 +228,20 @@ if confirmation and prolific_id:
 
                 st.spinner("Please wait for the image to load.")
 
-                if st.session_state["variation_iterator"] >0 and st.session_state["show_thumbs"] == False:
+                if st.session_state["variation_iterator"] >0:
                     st.write(" If you are unhappy with the generated image, edit, fix or expand your prompt and generate a new image.")
                     
+                def _thumbscallback(value):
+                    st.write(value)
+                    if value == "👎":
+                        st.session_state["show_thumbs"] = False
+
                 if st.session_state["show_thumbs"]:
                     option = st.selectbox(
                         "Are you satisfied with the generated image?",
                         ("None", "👍", "👎"),
                         index=None,
+                        onchange=_thumbscallback,
                         placeholder="Select an option"
                     )
                     
