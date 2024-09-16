@@ -45,29 +45,16 @@ def generate_image(prompt):
         n=1
     )
 
-    # img_b64 = response.data[0].b64_json
-    # bytes_decoded = base64.b64decode(img_b64)
-    # image_path_on_supastorage = st.session_state["prolific_id"] + "/"+ st.session_state["variation_iterator"]+".jpg"
-    # bucket_name = "images"
-    # supabase.storage.from_(bucket_name).upload(file=bytes_decoded,path=image_path_on_supastorage, file_options={"content-type": "image/jpeg"})
-    # db_image_url = supabase.storage.from_(bucket_name).get_public_url(image_path_on_supastorage)
+    img_b64 = response.data[0].b64_json
+    bytes_decoded = base64.b64decode(img_b64)
+    image_path_on_supastorage = st.session_state["prolific_id"] + "/"+ st.session_state["variation_iterator"]+".jpg"
+    bucket_name = "images"
+    supabase.storage.from_(bucket_name).upload(file=bytes_decoded,path=image_path_on_supastorage, file_options={"content-type": "image/jpeg"})
+    db_image_url = supabase.storage.from_(bucket_name).get_public_url(image_path_on_supastorage)
 
-
-    # data = [{
-    #     "prolific_id": st.session_state["prolific_id"],
-    #     "prompt": prompt,
-    #     "image_name": image_path_on_supastorage,
-    #     "satisfaction": 0,
-    #     "appropriateness": 0
-    # }]
-
-    # supabase_table_response = (
-    #     supabase.table("cc-t2i-test-attempts")
-    #     .upsert({"prolific_id": st.session_state["prolific_id"], "data": data})
-    #     .execute()
-    # )
-    print(st.session_state["variation_iterator"])
-    st.write(st.session_state["variation_iterator"])
+    st.session_state["imgurls"][st.session_state["variation_iterator"]] = db_image_url
+    st.session_state["openai_revised_prompts"][st.session_state["variation_iterator"]] = response.data[0].revised_prompt
+    st.session_state["variation_iterator"] += 1
     return response.data[0].url
 
 def update_db(feedback_text, satisfaction, appropriateness):
@@ -124,6 +111,13 @@ if "variation_iterator" not in st.session_state:
 if "show_thumbs" not in st.session_state:
     st.session_state["show_thumbs"] = False
 
+# all data to be saved
+if "prompt_list" not in st.session_state:
+    st.session_state["prompt_list"] = [None] * 10
+if "openai_revised_prompt_list" not in st.session_state:
+    st.session_state["openai_revised_prompt_list"] = [None] * 10
+if "imgurls" not in st.session_state:
+    st.session_state["imgurls"] = [None] * 10
 
 
 # Define the callback function for the Submit button
@@ -148,7 +142,6 @@ def generate_image_callback():
     st.session_state["disable_prompt_input"] = True
     # st.session_state["disable_generate_button"] = True
     st.session_state["image_generated"] = True
-    st.session_state["variation_iterator"] += 1
     # Use your actual image generation logic here
     st.session_state["generated_image"] = generate_image(st.session_state["prompt_description"])
     st.session_state["show_thumbs"] = True
@@ -188,7 +181,7 @@ if confirmation and prolific_id:
             value=st.session_state["breakfast_description_txt"],
             disabled=st.session_state["disable_breakfast_input"])
         
-        st.session_state["breakfast_description_txt"] = breakfast_description # WHY??
+        st.session_state["breakfast_description_txt"] = breakfast_description
 
         if breakfast_description:
             st.warning("Once you submit your breakfast description, you will not be able to change it.")
@@ -202,13 +195,13 @@ if confirmation and prolific_id:
             st.warning("Once you enter your prompt and press enter, you will not be able to change it.")
 
             # Text input for Prompt Description
-            prompt_description_val = st.text_input(
-                'Now, you are going to use an image generation tool. You are tasked to describe your breakfast in your country. You can use the keywords above as a reference. Please write a sentence below. You are allowed to expand, edit or add to these sentences later to improve the image.',
+            prompt_description_val = st.text_area(
+                'Now, you are going to use an image generation tool. You are tasked to describe your breakfast in your country. You can use the keywords above as a reference. Please write a sentence below. You are allowed to expand, edit or add to these sentences later to improve the image. This is your prompt',
                 key="prompt",
                 value=st.session_state["prompt_description"],
-                # disabled=st.session_state["disable_prompt_input"]
             )
             st.session_state["prompt_description"] = prompt_description_val
+            st.session_state["prompt_list"][st.session_state["variation_iterator"]] = prompt_description_val
 
             if prompt_description_val:
                 # Generate Image button with callback
@@ -278,5 +271,31 @@ if confirmation and prolific_id:
                         # Add slider for appropriateness
                         appropriateness = st.slider("How appropriate is the generated image for the prompt?", 0, 10, 5)
                         st.info("0: Absolutely not appropriate, 5: Could be appropriate in some contexts but also not appropriate in others, 10: Absolutely appropriate")
+
+                        submissions = []
+                        for prompt, imgurl, openai_revised_prompt in zip(st.session_state["prompt_list"], st.session_state["imgurls"], st.session_state["openai_revised_prompt_list"]):
+                            submissions.append({
+                                "prompt": prompt,
+                                "imgurl": imgurl,
+                                "openai_revised_prompt": openai_revised_prompt,
+                            })
+
+
+                        def finalsubmit_response():
+                            data = {
+                            "prolific_id": st.session_state["prolific_id"],
+                            "breakfast_description_txt": st.session_state["breakfast_description_txt"],
+                            "submissions": submissions,
+                            "satisfaction": satisfaction,
+                            "appropriateness": appropriateness
+                            }
+
+                            supabase_table_response = (
+                                supabase.table("cc-t2i-test-attempts")
+                                .upsert({"prolific_id": st.session_state["prolific_id"], "data": data})
+                                .execute()
+                            )
+
+                        st.button('Submit Response', on_click=finalsubmit_response, disabled=st.session_state["disable_submit_button"])
 else:
     st.info("Please enter and confirm your Prolific ID to proceed.")
