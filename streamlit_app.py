@@ -212,6 +212,7 @@ if confirmation and prolific_id:
                 if st.session_state["image_generated"]:
                     # Display the generated image
                     st.image(st.session_state["generated_image"])
+
                     st.write("Image generated successfully! If you don't see it yet, please wait for a few seconds.")
                     
                 score_mappings = {"👍": "thumbs_up", "👎": "thumbs_down"}
@@ -224,6 +225,7 @@ if confirmation and prolific_id:
                                             kwargs={
                                                 'scores': score_mappings,
                                             })
+                st.write(feedback)
                 st.warning("Only click on the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. There will be no option to generate another image after you click on the thumbs up.")
 
                 if feedback == "thumbs_down":
