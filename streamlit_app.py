@@ -229,19 +229,21 @@ if confirmation and prolific_id:
                 #                             })
                 # st.write(feedback)
 
+                st.spinner("Please wait for the image to load.")
 
                 option = st.selectbox(
                     "Are you satisfied with the generated image?",
-                    ("None", "thumbs_down", "thumbs_up"),
+                    ("None", "👍", "👎"),
                     index=None,
                     placeholder="Select an option"
                 )
+                
+                emoji_mappings = {"👍": "thumbs_up", "👎": "thumbs_down"}
 
                 # res = st.radio("Are you satisfied with the generated image?", ["thumbs_down", "thumbs_up"],
                 #          disabled=st.session_state["enable_feedback"])
-                st.warning("Only select the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. There will be no option to generate another image after you click on the thumbs up.")
+                st.warning("Only select the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. If you are not satisfied, please select thumbs down and edit your prompt.")
 
-                st.write(option)
 
                 if option == "thumbs_down":
                     st.write("Please update/edit the prompt as needed and click on the 'Generate Image' button again.")
@@ -255,8 +257,11 @@ if confirmation and prolific_id:
                     satisfaction = st.slider("How well does this image represent your mental picture of your breakfast?", 0, 10, 5)
                     st.info("0: Not satisfied, 5: No strong feelings, 10: Very satisfied")
 
-                    # Add slider for appropriateness
+                    # Draw a line
+                    st.markdown("---"*20)
+                    
 
+                    # Add slider for appropriateness
                     appropriateness = st.slider("How appropriate is the generated image for the prompt?", 0, 10, 5)
                     st.info("0: Absolutely not appropriate, 5: Could be appropriate in some contexts but also not appropriate in others, 10: Absolutely appropriate")
 else:
