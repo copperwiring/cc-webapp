@@ -118,6 +118,8 @@ if  "disable_generate_button" not in st.session_state:
     st.session_state["disable_generate_button"] = False
 if "enable_feedback" not in st.session_state:
     st.session_state["enable_feedback"] = False
+if "variation_iterator" not in st.session_state:
+    st.session_state["variation_iterator"] = 1
 
 
 
@@ -247,9 +249,11 @@ if confirmation and prolific_id:
                 st.warning("Only select the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. If you are not satisfied, please select thumbs down and edit your prompt.")
 
 
-                if option == "👍":
+                if option == "👎":
                     st.write("Please update/edit the prompt as needed and click on the 'Generate Image' button again.")
-                elif option == "👎":
+                    st.session_state["variation_iterator"] += 1
+                    st.write(f"Variation: {st.session_state['variation_iterator']}")
+                elif option == "👍":
                     st.session_state["enable_feedback"] = True
 
                     feedback_text = st.text_area("Please provide feedback on the generated image", height=100)
