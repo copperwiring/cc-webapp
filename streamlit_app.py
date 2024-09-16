@@ -296,6 +296,6 @@ if confirmation and prolific_id:
                                 .execute()
                             )
 
-                        st.button('Submit Response', on_click=finalsubmit_response, disabled=st.session_state["disable_submit_button"])
+                        st.button('Submit Response', on_click=finalsubmit_response)
 else:
     st.info("Please enter and confirm your Prolific ID to proceed.")
