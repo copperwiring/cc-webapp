@@ -217,7 +217,7 @@ if confirmation and prolific_id:
                     feedback = streamlit_feedback(feedback_type="thumbs")
                     st.warning("Only click on the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. There will be no option to generate another image after you click on the thumbs up.")
 
-                if feedback == "thumbs_thumbs_down":
+                if feedback == "thumbs_down":
                     st.write("Please update/edit the prompt as needed and click on the 'Generate Image' button again.")
                     st.session_state["disable_generate_button"] = False
                 elif feedback == "thumbs_up":
