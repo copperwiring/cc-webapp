@@ -41,33 +41,33 @@ def generate_image(prompt):
         prompt=prompt,
         size="1024x1024",
         quality="standard",
-        response_format="b64_json",
+        response_format="url",
         n=1
     )
 
-    img_b64 = response.data[0].b64_json
-    bytes_decoded = base64.b64decode(img_b64)
-    image_path_on_supastorage = st.session_state["prolific_id"] + "/1.jpg" 
-    bucket_name = "images"
-    supabase.storage.from_(bucket_name).upload(file=bytes_decoded,path=image_path_on_supastorage, file_options={"content-type": "image/jpeg"})
-    db_image_url = supabase.storage.from_(bucket_name).get_public_url(image_path_on_supastorage)
+    # img_b64 = response.data[0].b64_json
+    # bytes_decoded = base64.b64decode(img_b64)
+    # image_path_on_supastorage = st.session_state["prolific_id"] + "/"+ st.session_state["variation_iterator"]+".jpg"
+    # bucket_name = "images"
+    # supabase.storage.from_(bucket_name).upload(file=bytes_decoded,path=image_path_on_supastorage, file_options={"content-type": "image/jpeg"})
+    # db_image_url = supabase.storage.from_(bucket_name).get_public_url(image_path_on_supastorage)
 
 
-    data = [{
-        "prolific_id": st.session_state["prolific_id"],
-        "prompt": prompt,
-        "image_name": image_path_on_supastorage,
-        "satisfaction": 0,
-        "appropriateness": 0
-    }]
+    # data = [{
+    #     "prolific_id": st.session_state["prolific_id"],
+    #     "prompt": prompt,
+    #     "image_name": image_path_on_supastorage,
+    #     "satisfaction": 0,
+    #     "appropriateness": 0
+    # }]
 
-    supabase_table_response = (
-        supabase.table("cc-t2i-test-attempts")
-        .upsert({"prolific_id": st.session_state["prolific_id"], "data": data})
-        .execute()
-    )
-    
-    return db_image_url
+    # supabase_table_response = (
+    #     supabase.table("cc-t2i-test-attempts")
+    #     .upsert({"prolific_id": st.session_state["prolific_id"], "data": data})
+    #     .execute()
+    # )
+    st.write(f"Variation: {st.session_state['variation_iterator']}")
+    return response.data[0].url
 
 def update_db(feedback_text, satisfaction, appropriateness):
     """
@@ -119,7 +119,7 @@ if  "disable_generate_button" not in st.session_state:
 if "enable_feedback" not in st.session_state:
     st.session_state["enable_feedback"] = False
 if "variation_iterator" not in st.session_state:
-    st.session_state["variation_iterator"] = 1
+    st.session_state["variation_iterator"] = 0
 
 
 
@@ -145,6 +145,7 @@ def generate_image_callback():
     st.session_state["disable_prompt_input"] = True
     # st.session_state["disable_generate_button"] = True
     st.session_state["image_generated"] = True
+    st.session_state["variation_iterator"] += 1
     # Use your actual image generation logic here
     st.session_state["generated_image"] = generate_image(st.session_state["prompt_description"])
 
@@ -251,8 +252,7 @@ if confirmation and prolific_id:
 
                 if option == "👎":
                     st.write("Please update/edit the prompt as needed and click on the 'Generate Image' button again.")
-                    st.session_state["variation_iterator"] += 1
-                    st.write(f"Variation: {st.session_state['variation_iterator']}")
+                    option = "None"
                 elif option == "👍":
                     st.session_state["enable_feedback"] = True
 
