@@ -231,7 +231,8 @@ if confirmation and prolific_id:
                 if st.session_state["variation_iterator"] > 0:
                     st.write(" If you are unhappy with the generated image, edit, fix or expand your prompt and generate a new image.")
                     
-                def _thumbscallback(option):
+                def _thumbscallback():
+                    option = st.session_state['thumbs_option']
                     st.write(option)
                     if option == "👎":
                         st.session_state["show_thumbs"] = False
@@ -241,12 +242,11 @@ if confirmation and prolific_id:
                         "Are you satisfied with the generated image?",
                         ("None", "👍", "👎"),
                         index=None,
+                        key='thumbs_option',  # Add a unique key
                         on_change=_thumbscallback,
-                        placeholder="Select an option"
-                    )
-                    
-                    emoji_mappings = {"👍": "thumbs_up", "👎": "thumbs_down"}
+                        placeholder="Select an option")
 
+                    
                     # res = st.radio("Are you satisfied with the generated image?", ["thumbs_down", "thumbs_up"],
                     #          disabled=st.session_state["enable_feedback"])
                     st.warning("Only select the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. If you are not satisfied, please select thumbs down and edit your prompt.")
