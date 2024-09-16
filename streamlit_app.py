@@ -140,7 +140,7 @@ def submit_breakfast_callback():
 # Define the callback function for the Generate Image button
 def generate_image_callback():
     st.session_state["disable_prompt_input"] = True
-    st.session_state["disable_generate_button"] = True
+    # st.session_state["disable_generate_button"] = True
     st.session_state["image_generated"] = True
     # Use your actual image generation logic here
     st.session_state["generated_image"] = generate_image(st.session_state["prompt_description"])
@@ -207,7 +207,7 @@ if confirmation and prolific_id:
                 st.button(
                     'Generate Image',
                     on_click=generate_image_callback,
-                    disabled=st.session_state["disable_generate_button"]
+                    # disabled=st.session_state["disable_generate_button"]
                 )
 
                 # st.spinner("Generating image...Please wait.")
@@ -229,7 +229,7 @@ if confirmation and prolific_id:
                 #                             })
                 # st.write(feedback)
 
-                res = st.radio("Are you satisfied with the generated image?", ["thumbs_up", "thumbs_down"],
+                res = st.radio("Are you satisfied with the generated image?", ["thumbs_down", "thumbs_up"],
                          disabled=st.session_state["enable_feedback"])
                 st.warning("Only select the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. There will be no option to generate another image after you click on the thumbs up.")
 
@@ -237,10 +237,10 @@ if confirmation and prolific_id:
 
                 if res == "thumbs_down":
                     st.write("Please update/edit the prompt as needed and click on the 'Generate Image' button again.")
-                    st.session_state["disable_generate_button"] = False
+                    # st.session_state["disable_generate_button"] = False
                 elif res == "thumbs_up":
                     st.session_state["enable_feedback"] = True
-                    st.session_state["disable_generate_button"] = True
+                    # st.session_state["disable_generate_button"] = True
 
                     feedback_text = st.text_area("Please provide feedback on the generated image", height=100)
                     st.write(feedback_text)
