@@ -199,6 +199,7 @@ if confirmation and prolific_id:
                 'Now, you are going to use an image generation tool. You are tasked to describe your breakfast in your country. You can use the keywords above as a reference. Please write a sentence below. You are allowed to expand, edit or add to these sentences later to improve the image. This is your prompt',
                 key="prompt",
                 value=st.session_state["prompt_description"],
+                help = "This will be the prompt for the image generation tool.",
             )
             st.session_state["prompt_description"] = prompt_description_val
             st.session_state["prompt_list"][st.session_state["variation_iterator"]] = prompt_description_val
