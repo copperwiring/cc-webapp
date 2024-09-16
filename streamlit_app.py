@@ -228,7 +228,7 @@ if confirmation and prolific_id:
 
                 st.spinner("Please wait for the image to load.")
 
-                if st.session_state["variation_iterator"] > 0:
+                if st.session_state["variation_iterator"] > 0 and st.session_state["show_thumbs"] == False:
                     st.info("""
                             1. As you are unhappy with the generated image, we need to generate it again to get a better image. 
                             2. Scroll up to the prompt text box and edit it.
