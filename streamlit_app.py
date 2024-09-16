@@ -21,7 +21,7 @@ st.title('Culture Specific Image Generation Task')
 
 
 
-
+task_name = "breakfast"
 st.markdown("---"*20)
 # Write instructions numbered list
 st.write("Instructions")
@@ -47,7 +47,7 @@ def generate_image(prompt):
 
     img_b64 = response.data[0].b64_json
     bytes_decoded = base64.b64decode(img_b64)
-    image_path_on_supastorage = str(st.session_state["prolific_id"]) + "/"+ str(st.session_state["variation_iterator"])+".jpg"
+    image_path_on_supastorage = str(st.session_state["prolific_id"]) + "/"+ task_name + "/" + str(st.session_state["variation_iterator"])+".jpg"
     bucket_name = "images"
     supabase.storage.from_(bucket_name).upload(file=bytes_decoded,path=image_path_on_supastorage, file_options={"content-type": "image/jpeg", "upsert": 'true'})
     db_image_url = supabase.storage.from_(bucket_name).get_public_url(image_path_on_supastorage)
