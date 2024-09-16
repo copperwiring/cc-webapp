@@ -31,7 +31,7 @@ feedback = streamlit_feedback(feedback_type="thumbs",
                                   'scores': score_mappings,
                               })
 
-if feedback == "👍":
+if feedback == "1":
     st.write("You clicked thumbs up!")
 
 st.markdown("---"*20)
