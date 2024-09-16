@@ -287,6 +287,7 @@ if confirmation and prolific_id:
                             "prolific_id": st.session_state["prolific_id"],
                             "breakfast_description_txt": st.session_state["breakfast_description_txt"],
                             "submissions": submissions,
+                            "feedback": feedback_text,
                             "satisfaction": satisfaction,
                             "appropriateness": appropriateness
                             }
