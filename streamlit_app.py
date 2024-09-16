@@ -41,7 +41,7 @@ def generate_image(prompt):
         prompt=prompt,
         size="1024x1024",
         quality="standard",
-        response_format="url",
+        response_format="b64_json",
         n=1
     )
 
@@ -55,7 +55,7 @@ def generate_image(prompt):
     st.session_state["imgurls"][st.session_state["variation_iterator"]] = db_image_url
     st.session_state["openai_revised_prompts"][st.session_state["variation_iterator"]] = response.data[0].revised_prompt
     st.session_state["variation_iterator"] += 1
-    return response.data[0].url
+    return db_image_url
 
 def update_db(feedback_text, satisfaction, appropriateness):
     """
