@@ -32,13 +32,12 @@ def _submit_feedback(feedback, scores):
 
     return score
 
-
 feedback = streamlit_feedback(feedback_type="thumbs", 
                               on_submit=_submit_feedback, 
                               kwargs={
                                   'scores': score_mappings,
                               })
-
+st.write(feedback)
 
 st.markdown("---"*20)
 # Write instructions numbered list
