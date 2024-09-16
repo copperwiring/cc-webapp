@@ -114,8 +114,8 @@ if "show_thumbs" not in st.session_state:
 # all data to be saved
 if "prompt_list" not in st.session_state:
     st.session_state["prompt_list"] = [None] * 10
-if "openai_revised_prompt_list" not in st.session_state:
-    st.session_state["openai_revised_prompt_list"] = [None] * 10
+if "openai_revised_prompts" not in st.session_state:
+    st.session_state["openai_revised_prompts"] = [None] * 10
 if "imgurls" not in st.session_state:
     st.session_state["imgurls"] = [None] * 10
 
