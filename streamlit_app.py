@@ -214,7 +214,9 @@ if confirmation and prolific_id:
                     st.write("Image generated successfully! If you don't see it yet, please wait for a few seconds.")
                     
                 if st.session_state["generated_image"]:
-                    feedback = streamlit_feedback(feedback_type="thumbs")
+                    score_mappings = {"👍": "thumbs_up", "👎": "thumbs_down"}
+                    feedback = streamlit_feedback(feedback_type="thumbs",
+                                                  score_mappings=score_mappings,)
                     st.warning("Only click on the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. There will be no option to generate another image after you click on the thumbs up.")
 
                 if feedback == "thumbs_down":
