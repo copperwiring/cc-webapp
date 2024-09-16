@@ -24,6 +24,9 @@ feedback = streamlit_feedback(feedback_type="thumbs",
                               kwargs={"score_mappings": score_mappings})
 st.write(feedback)
 
+if feedback == "thumbs_down":
+    st.write("Downvoted")
+
 st.markdown("---"*20)
 # Write instructions numbered list
 st.write("Instructions")
