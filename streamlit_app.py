@@ -115,6 +115,8 @@ if "generated_image" not in st.session_state:            # to store generated im
     st.session_state["generated_image"] = None
 if  "disable_generate_button" not in st.session_state:
     st.session_state["disable_generate_button"] = False
+if "enable_feedback" not in st.session_state:
+    st.session_state["enable_feedback"] = False
 
 
 
@@ -235,6 +237,7 @@ if confirmation and prolific_id:
                     st.write("Please update/edit the prompt as needed and click on the 'Generate Image' button again.")
                     st.session_state["disable_generate_button"] = False
                 elif res == "thumbs_up":
+                    st.session_state["enable_feedback"] = True
                     st.session_state["disable_generate_button"] = True
 
                     feedback_text = st.text_area("Please provide feedback on the generated image", height=100)
