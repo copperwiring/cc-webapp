@@ -229,7 +229,12 @@ if confirmation and prolific_id:
                 st.spinner("Please wait for the image to load.")
 
                 if st.session_state["variation_iterator"] > 0:
-                    st.write(" If you are unhappy with the generated image, edit, fix or expand your prompt and generate a new image.")
+                    st.info("""
+                            1. As you are unhappy with the generated image, we need to generate it again to get a better image. 
+                            2. Scroll up to the prompt text box and edit it.
+                            3. Click on the 'Generate Image' button again to generate a new image.
+                            4. It could be a new prompt or a slight variation of the previous prompt.
+                            """)
                     
                 def _thumbscallback():
                     option = st.session_state['thumbs_option']
