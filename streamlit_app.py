@@ -32,13 +32,13 @@ st.write("4. Do not forget to write your Prolific ID in the first step and make 
 st.write("5. There is no word limit in the text input fields. You can write as much as you want.")
 st.markdown("---"*20)
 
-
+prefix_prompt = "I NEED to test how the tool works with extremely simple prompts. DO NOT add any detail, just use it AS-IS: "
 # Your image generation function
 def generate_image(prompt):
     client = OpenAI(api_key=OPENAI_KEY)
     response = client.images.generate(
         model="dall-e-3",
-        prompt=prompt,
+        prompt=prefix_prompt + prompt,
         size="1024x1024",
         quality="standard",
         response_format="b64_json",
