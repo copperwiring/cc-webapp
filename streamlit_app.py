@@ -241,7 +241,7 @@ if confirmation and prolific_id:
                         "Are you satisfied with the generated image?",
                         ("None", "👍", "👎"),
                         index=None,
-                        onchange=_thumbscallback,
+                        on_change=_thumbscallback,
                         placeholder="Select an option"
                     )
                     
