@@ -4,6 +4,7 @@ from PIL import Image
 import streamlit as st
 from supabase import create_client, Client
 import base64
+from streamlit_feedback import streamlit_feedback
 
 st.cache_data.clear()
 st.cache_resource.clear()
@@ -18,8 +19,18 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 # res = supabase.storage.create_bucket("images")
 # st.write(res)
 
-st.title('CC-T2I')
-flag = False
+st.title('Culture Specific Image Generation Task')
+
+st.markdown("---"*20)
+# Write instructions numbered list
+st.write("Instructions")
+st.write("1. Browser compatibility: This task is best done on Chrome or Edge.")
+st.write("2. Since this task involves writing text in native language, please use a keyboard that supports your native language OR use your mobile phone")
+st.write("3. Do not forget to write your Prolific ID in the first step and make sure to confirm it. Once you confirm it, you will not be able to change it.")
+st.write("4. There is no word limit in the text input fields. You can write as much as you want.")
+st.markdown("---"*20)
+
+
 # Your image generation function
 def generate_image(prompt):
     client = OpenAI(api_key=OPENAI_KEY)
@@ -56,38 +67,61 @@ def generate_image(prompt):
     
     return db_image_url
 
+def update_db(feedback_text, satisfaction, appropriateness):
+    """
+    Update the existing record in the database with satisfaction, appropriateness and comments
+    """
+    data = [{
+        "satisfaction": satisfaction,
+        "appropriateness": appropriateness,
+        "feedback": feedback_text
+    }]
+
+    supabase_table_response = (
+        supabase.table("cc-t2i-test-attempts")
+        .upsert({"prolific_id": st.session_state["prolific_id"], "data": data})
+        .execute()
+    )
+
+    return supabase_table_response
+
+
 # Initialize session state variables if they don't exist
+
 if "prolific_id" not in st.session_state:
     st.session_state["prolific_id"] = ""
-if "disable_prolific_id" not in st.session_state:
+if "disable_prolific_id" not in st.session_state:       # to disable text input for prolific id
     st.session_state["disable_prolific_id"] = False
-if "disable_confirm_id" not in st.session_state:
+if "disable_confirm_id" not in st.session_state:        # to disbale checkbox where user confirms to continue with prolific id
     st.session_state["disable_confirm_id"] = False
-if "submitted" not in st.session_state:
-    st.session_state["submitted"] = False
-if "disable_submit_button" not in st.session_state:
-    st.session_state["disable_submit_button"] = False
-if "disable_breakfast_input" not in st.session_state:
+if "disable_submit_button" not in st.session_state:     # to disable submit button after it is clicked using the callback
+    st.session_state["disable_submit_button"] = False  
+if "id_and_buttonclick_done" not in st.session_state:   # flag to see if prolificid + idconfirmation + submit button is clicked
+    st.session_state["id_and_buttonclick_done"] = False
+if "disable_breakfast_input" not in st.session_state:   # to enable/disbale text input for breakfast description
     st.session_state["disable_breakfast_input"] = False
-if "breakfast_submitted" not in st.session_state:
+if "breakfast_submitted" not in st.session_state:       # flag to see if breakfast description is submitted
     st.session_state["breakfast_submitted"] = False
-if "breakfast_description" not in st.session_state:
-    st.session_state["breakfast_description"] = ""
-if "breakfast_submit_show" not in st.session_state:
-    st.session_state["breakfast_submit_show"] = False
-if "image_generated" not in st.session_state:
+if "breakfast_description_txt" not in st.session_state: # to store breakfast description text   
+    st.session_state["breakfast_description_txt"] = ""
+# if "breakfast_submit_show" not in st.session_state:
+#     st.session_state["breakfast_submit_show"] = False
+if "image_generated" not in st.session_state:            # flag to see if image is being generated
     st.session_state["image_generated"] = False
-if "prompt_description" not in st.session_state:
+if "prompt_description" not in st.session_state:         # to store prompt description text
     st.session_state["prompt_description"] = ""
-if "generated_image" not in st.session_state:
+if "generated_image" not in st.session_state:            # to store generated image
     st.session_state["generated_image"] = None
+if  "disable_generate_button" not in st.session_state:
+    st.session_state["disable_generate_button"] = False
+
 
 
 # Define the callback function for the Submit button
 def submit_callback():
     st.session_state["disable_prolific_id"] = True
     st.session_state["disable_confirm_id"] = True
-    st.session_state["submitted"] = True
+    st.session_state["id_and_buttonclick_done"] = True
     st.session_state["disable_submit_button"] = True
 
 
@@ -96,9 +130,9 @@ def submit_breakfast_callback():
     st.session_state["disable_breakfast_input"] = True
     st.session_state["breakfast_submitted"] = True
 
-def onchange_breakfast_description_callback(value):
-    if len(value) > 10:
-        st.session_state["breakfast_submit_show"] = True
+# def onchange_breakfast_description_callback(value):
+#     if len(value) > 10:
+#         st.session_state["breakfast_submit_show"] = True
 
 # Define the callback function for the Generate Image button
 def generate_image_callback():
@@ -131,7 +165,7 @@ if confirmation and prolific_id:
     # Use the on_click parameter to set the callback
     st.button('Submit', on_click=submit_callback, disabled=st.session_state["disable_submit_button"])
 
-    if st.session_state["submitted"]:
+    if st.session_state["id_and_buttonclick_done"]:
         st.warning("You will not be able to change your Prolific ID after this point.")
         st.write("Instructions")
 
@@ -141,8 +175,9 @@ if confirmation and prolific_id:
         breakfast_description = st.text_area(
             'Enter your description here',
             value=st.session_state["breakfast_description"],
-            disabled=st.session_state["disable_breakfast_input"]        )
-        st.session_state["breakfast_description"] = breakfast_description
+            disabled=st.session_state["disable_breakfast_input"])
+        
+        st.session_state["breakfast_description_txt"] = breakfast_description # WHY??
 
         if breakfast_description:
             st.warning("Once you submit your breakfast description, you will not be able to change it.")
@@ -156,40 +191,48 @@ if confirmation and prolific_id:
             st.warning("Once you enter your prompt and press enter, you will not be able to change it.")
 
             # Text input for Prompt Description
-            prompt_description = st.text_input(
+            prompt_description_val = st.text_input(
                 'Now, you are going to use an image generation tool. You are tasked to describe your breakfast in your country. You can use the keywords above as a reference. Please write a sentence below. You are allowed to expand, edit or add to these sentences later to improve the image.',
                 key="prompt",
                 value=st.session_state["prompt_description"],
                 # disabled=st.session_state["disable_prompt_input"]
             )
-            st.session_state["prompt_description"] = prompt_description
+            st.session_state["prompt_description"] = prompt_description_val
 
-            if prompt_description:
+            if prompt_description_val:
                 # Generate Image button with callback
                 st.button(
                     'Generate Image',
                     on_click=generate_image_callback,
-                    # disabled=st.session_state["disable_generate_button"]
+                    disabled=st.session_state["disable_generate_button"]
                 )
 
                 # st.spinner("Generating image...Please wait.")
                 if st.session_state["image_generated"]:
                     # Display the generated image
                     st.image(st.session_state["generated_image"])
-                    # flag = True
-                    st.write("Image generated successfully!")
+                    st.write("Image generated successfully! If you don't see it yet, please wait for a few seconds.")
+                    
 
-                # if flag:
-                #     # Add slider for satisfaction
-                #     st.info("0: Not satisfied, 5: No strong feelings, 10: Very satisfied")
-                #     satisfaction = st.slider("How satisfied are you with the generated image?", 0, 10, 5)
-                #     #Allow user to enter comments
-                #     comments = st.text_area("Any comments on the satisfaction of the generated image?. (Optional)")
+                feedback = streamlit_feedback(feedback_type="thumbs")
+                st.warning("Only click on the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. There will be no option to generate another image after you click on the thumbs up.")
 
-                #     # Add slider for appropriateness
-                #     st.info("0: Absolutely not appropriate, 5: Could be appropriate in some contexts but also not appropriate in others, 10: Absolutely appropriate")
-                #     appropriateness = st.slider("How appropriate is the generated image for the prompt?", 0, 10, 5)
-                #     #Allow user to enter comments
-                #     comments = st.text_area("Any comments on the appropriateness of the generated image?. (Optional)")
+                if feedback == "thumbs_thumbs_down":
+                    st.write("Please update/edit the prompt as needed and click on the 'Generate Image' button again.")
+                    st.session_state["disable_generate_button"] = False
+                elif feedback == "thumbs_up":
+                    st.session_state["disable_generate_button"] = True
+
+                    feedback_text = st.text_area("Please provide feedback on the generated image", height=100)
+                    st.write(feedback_text)
+
+                    # Add slider for satisfaction
+                    satisfaction = st.slider("How well does this image represent your mental picture of your breakfast?", 0, 10, 5)
+                    st.info("0: Not satisfied, 5: No strong feelings, 10: Very satisfied")
+
+                    # Add slider for appropriateness
+
+                    appropriateness = st.slider("How appropriate is the generated image for the prompt?", 0, 10, 5)
+                    st.info("0: Absolutely not appropriate, 5: Could be appropriate in some contexts but also not appropriate in others, 10: Absolutely appropriate")
 else:
     st.info("Please enter and confirm your Prolific ID to proceed.")
