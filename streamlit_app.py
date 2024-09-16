@@ -24,7 +24,7 @@ feedback = streamlit_feedback(feedback_type="thumbs",
                               kwargs={"score_mappings": score_mappings})
 st.write(feedback)
 
-if feedback == "thumbs_down":
+if feedback == "👎":
     st.write("Downvoted")
 
 st.markdown("---"*20)
