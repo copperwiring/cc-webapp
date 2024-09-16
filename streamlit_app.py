@@ -233,6 +233,8 @@ if confirmation and prolific_id:
                          disabled=st.session_state["enable_feedback"])
                 st.warning("Only select the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. There will be no option to generate another image after you click on the thumbs up.")
 
+                st.write(res)
+
                 if res == "thumbs_down":
                     st.write("Please update/edit the prompt as needed and click on the 'Generate Image' button again.")
                     st.session_state["disable_generate_button"] = False
