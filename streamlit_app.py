@@ -120,6 +120,8 @@ if "enable_feedback" not in st.session_state:
     st.session_state["enable_feedback"] = False
 if "variation_iterator" not in st.session_state:
     st.session_state["variation_iterator"] = 0
+if "show_thumbs" not in st.session_state:
+    st.session_state["show_thumbs"] = False
 
 
 
@@ -148,6 +150,7 @@ def generate_image_callback():
     st.session_state["variation_iterator"] += 1
     # Use your actual image generation logic here
     st.session_state["generated_image"] = generate_image(st.session_state["prompt_description"])
+    st.session_state["show_thumbs"] = True
 
 
 
@@ -221,54 +224,47 @@ if confirmation and prolific_id:
                     st.image(st.session_state["generated_image"])
 
                     st.write("Image generated successfully! If you don't see it yet, please wait for a few seconds.")
-                    
-                # score_mappings = {"👍": "thumbs_up", "👎": "thumbs_down"}
-                # def _submit_feedback(feedback, scores):
-                #     score = scores.get(feedback["score"])
-                #     return score
 
-                # feedback = streamlit_feedback(feedback_type="thumbs", 
-                #                             on_submit=_submit_feedback, 
-                #                             kwargs={
-                #                                 'scores': score_mappings,
-                #                             })
-                # st.write(feedback)
 
                 st.spinner("Please wait for the image to load.")
 
-                option = st.selectbox(
-                    "Are you satisfied with the generated image?",
-                    ("None", "👍", "👎"),
-                    index=None,
-                    placeholder="Select an option"
-                )
-                
-                emoji_mappings = {"👍": "thumbs_up", "👎": "thumbs_down"}
+                if st.session_state["variation_iterator"] >0 and st.session_state["show_thumbs"] == False:
+                    st.write(" If you are unhappy with the generated image, edit, fix or expand your prompt and generate a new image.")
+                    
+                if st.session_state["show_thumbs"]:
+                    option = st.selectbox(
+                        "Are you satisfied with the generated image?",
+                        ("None", "👍", "👎"),
+                        index=None,
+                        placeholder="Select an option"
+                    )
+                    
+                    emoji_mappings = {"👍": "thumbs_up", "👎": "thumbs_down"}
 
-                # res = st.radio("Are you satisfied with the generated image?", ["thumbs_down", "thumbs_up"],
-                #          disabled=st.session_state["enable_feedback"])
-                st.warning("Only select the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. If you are not satisfied, please select thumbs down and edit your prompt.")
+                    # res = st.radio("Are you satisfied with the generated image?", ["thumbs_down", "thumbs_up"],
+                    #          disabled=st.session_state["enable_feedback"])
+                    st.warning("Only select the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. If you are not satisfied, please select thumbs down and edit your prompt.")
+
+                    
+                    if option == "👎":
+                        option = "None"
+                        st.session_state["show_thumbs"] = False
+                    elif option == "👍":
+                        st.session_state["enable_feedback"] = True
+
+                        feedback_text = st.text_area("Please provide feedback on the generated image", height=100)
+                        st.write(feedback_text)
+
+                        # Add slider for satisfaction
+                        satisfaction = st.slider("How well does this image represent your mental picture of your breakfast?", 0, 10, 5)
+                        st.info("0: Not satisfied, 5: No strong feelings, 10: Very satisfied")
+
+                        # Draw a line
+                        st.markdown("---"*20)
 
 
-                if option == "👎":
-                    st.write("Please update/edit the prompt as needed and click on the 'Generate Image' button again.")
-                    option = "None"
-                elif option == "👍":
-                    st.session_state["enable_feedback"] = True
-
-                    feedback_text = st.text_area("Please provide feedback on the generated image", height=100)
-                    st.write(feedback_text)
-
-                    # Add slider for satisfaction
-                    satisfaction = st.slider("How well does this image represent your mental picture of your breakfast?", 0, 10, 5)
-                    st.info("0: Not satisfied, 5: No strong feelings, 10: Very satisfied")
-
-                    # Draw a line
-                    st.markdown("---"*20)
-
-
-                    # Add slider for appropriateness
-                    appropriateness = st.slider("How appropriate is the generated image for the prompt?", 0, 10, 5)
-                    st.info("0: Absolutely not appropriate, 5: Could be appropriate in some contexts but also not appropriate in others, 10: Absolutely appropriate")
+                        # Add slider for appropriateness
+                        appropriateness = st.slider("How appropriate is the generated image for the prompt?", 0, 10, 5)
+                        st.info("0: Absolutely not appropriate, 5: Could be appropriate in some contexts but also not appropriate in others, 10: Absolutely appropriate")
 else:
     st.info("Please enter and confirm your Prolific ID to proceed.")
