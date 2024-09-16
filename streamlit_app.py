@@ -174,7 +174,7 @@ if confirmation and prolific_id:
         # Text input for Breakfast Description
         breakfast_description = st.text_area(
             'Enter your description here',
-            value=st.session_state["breakfast_description"],
+            value=st.session_state["breakfast_description_txt"],
             disabled=st.session_state["disable_breakfast_input"])
         
         st.session_state["breakfast_description_txt"] = breakfast_description # WHY??
