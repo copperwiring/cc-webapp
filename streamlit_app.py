@@ -215,23 +215,26 @@ if confirmation and prolific_id:
 
                     st.write("Image generated successfully! If you don't see it yet, please wait for a few seconds.")
                     
-                score_mappings = {"👍": "thumbs_up", "👎": "thumbs_down"}
-                def _submit_feedback(feedback, scores):
-                    score = scores.get(feedback["score"])
-                    return score
+                # score_mappings = {"👍": "thumbs_up", "👎": "thumbs_down"}
+                # def _submit_feedback(feedback, scores):
+                #     score = scores.get(feedback["score"])
+                #     return score
 
-                feedback = streamlit_feedback(feedback_type="thumbs", 
-                                            on_submit=_submit_feedback, 
-                                            kwargs={
-                                                'scores': score_mappings,
-                                            })
-                st.write(feedback)
-                st.warning("Only click on the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. There will be no option to generate another image after you click on the thumbs up.")
+                # feedback = streamlit_feedback(feedback_type="thumbs", 
+                #                             on_submit=_submit_feedback, 
+                #                             kwargs={
+                #                                 'scores': score_mappings,
+                #                             })
+                # st.write(feedback)
 
-                if feedback == "thumbs_down":
+                res = st.radio("Are you satisfied with the generated image?", ["thumbs_up", "thumbs_down"],
+                         disabled=st.session_state["enable_feedback"])
+                st.warning("Only select the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. There will be no option to generate another image after you click on the thumbs up.")
+
+                if res == "thumbs_down":
                     st.write("Please update/edit the prompt as needed and click on the 'Generate Image' button again.")
                     st.session_state["disable_generate_button"] = False
-                elif feedback == "thumbs_up":
+                elif res == "thumbs_up":
                     st.session_state["disable_generate_button"] = True
 
                     feedback_text = st.text_area("Please provide feedback on the generated image", height=100)
