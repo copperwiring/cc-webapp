@@ -66,7 +66,8 @@ def generate_image(prompt):
     #     .upsert({"prolific_id": st.session_state["prolific_id"], "data": data})
     #     .execute()
     # )
-    st.write(f"Variation: {st.session_state['variation_iterator']}")
+    print(st.session_state["variation_iterator"])
+    st.write(st.session_state["variation_iterator"])
     return response.data[0].url
 
 def update_db(feedback_text, satisfaction, appropriateness):
