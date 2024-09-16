@@ -135,7 +135,7 @@ if confirmation and prolific_id:
         st.warning("You will not be able to change your Prolific ID after this point.")
         st.write("Instructions")
 
-        st.write("Write some keywords that describe your breakfast in your country. For example: shot of espresso, croissant, orange juice, reading the newspaper, etc.")
+        st.write("""Write some keywords that describe your breakfast in your country. Someone from France might write the following phrases: "shot of espresso, croissant, orange juice, reading the newspaper", while someone from Scotland might write "cup of tea, bowl of porridge, listening to morning radio".""")
         
         # Text input for Breakfast Description
         breakfast_description = st.text_area(
@@ -157,7 +157,7 @@ if confirmation and prolific_id:
 
             # Text input for Prompt Description
             prompt_description = st.text_input(
-                'Enter your prompt',
+                'Now, you are going to use an image generation tool. You are tasked to describe your breakfast in your country. You can use the keywords above as a reference. Please write a sentence below. You are allowed to expand, edit or add to these sentences later to improve the image.',
                 key="prompt",
                 value=st.session_state["prompt_description"],
                 # disabled=st.session_state["disable_prompt_input"]
