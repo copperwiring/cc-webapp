@@ -229,18 +229,24 @@ if confirmation and prolific_id:
                 #                             })
                 # st.write(feedback)
 
-                res = st.radio("Are you satisfied with the generated image?", ["thumbs_down", "thumbs_up"],
-                         disabled=st.session_state["enable_feedback"])
+
+                option = st.selectbox(
+                    "Are you satisfied with the generated image?",
+                    ("None", "thumbs_down", "thumbs_up"),
+                    index=None,
+                    placeholder="Select an option"
+                )
+
+                # res = st.radio("Are you satisfied with the generated image?", ["thumbs_down", "thumbs_up"],
+                #          disabled=st.session_state["enable_feedback"])
                 st.warning("Only select the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. There will be no option to generate another image after you click on the thumbs up.")
 
-                st.write(res)
+                st.write(option)
 
-                if res == "thumbs_down":
+                if option == "thumbs_down":
                     st.write("Please update/edit the prompt as needed and click on the 'Generate Image' button again.")
-                    # st.session_state["disable_generate_button"] = False
-                elif res == "thumbs_up":
+                elif option == "thumbs_up":
                     st.session_state["enable_feedback"] = True
-                    # st.session_state["disable_generate_button"] = True
 
                     feedback_text = st.text_area("Please provide feedback on the generated image", height=100)
                     st.write(feedback_text)
