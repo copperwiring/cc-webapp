@@ -273,7 +273,7 @@ if confirmation and prolific_id:
                         st.info("0: Absolutely not appropriate, 5: Could be appropriate in some contexts but also not appropriate in others, 10: Absolutely appropriate")
 
                         submissions = []
-                        for prompt, imgurl, openai_revised_prompt in zip(st.session_state["prompt_list"], st.session_state["imgurls"], st.session_state["openai_revised_prompt_list"]):
+                        for prompt, imgurl, openai_revised_prompt in zip(st.session_state["prompt_list"], st.session_state["imgurls"], st.session_state["openai_revised_prompts"]):
                             submissions.append({
                                 "prompt": prompt,
                                 "imgurl": imgurl,
