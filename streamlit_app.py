@@ -16,10 +16,13 @@ SUPABASE_KEY = st.secrets["SUPABASE_KEY"]
 SUPABASE_URL = st.secrets["SUPABASE_URL"]   
 
 supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)    
-# res = supabase.storage.create_bucket("images")
-# st.write(res)
 
 st.title('Culture Specific Image Generation Task')
+
+score_mappings = {"👍": "thumbs_up", "👎": "thumbs_down"}
+feedback = streamlit_feedback(feedback_type="thumbs",
+                              score_mappings=score_mappings)
+st.write(feedback)
 
 st.markdown("---"*20)
 # Write instructions numbered list
@@ -216,7 +219,7 @@ if confirmation and prolific_id:
                 if st.session_state["generated_image"]:
                     score_mappings = {"👍": "thumbs_up", "👎": "thumbs_down"}
                     feedback = streamlit_feedback(feedback_type="thumbs",
-                                                  score_mappings=score_mappings,)
+                                                  score_mappings=score_mappings)
                     st.warning("Only click on the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. There will be no option to generate another image after you click on the thumbs up.")
 
                 if feedback == "thumbs_down":
