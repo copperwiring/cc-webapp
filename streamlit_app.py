@@ -22,6 +22,7 @@ st.title('Culture Specific Image Generation Task')
 
 def _submit_feedback(feedback, scores):
     score = scores.get(feedback["score"])
+    st.write(f"Feedback", score)
     return score
 
 score_mappings = {"👍": 1, "👎": 0}
