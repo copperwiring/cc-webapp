@@ -41,7 +41,7 @@ def generate_image(prompt):
     response = client.images.generate(
         model="dall-e-3",
         prompt=prefix_prompt + prompt,
-        size="1024x1024",
+        size="512x512",
         quality="standard",
         response_format="b64_json",
         n=1
@@ -115,11 +115,11 @@ if "show_thumbs" not in st.session_state:
 
 # all data to be saved
 if "prompt_list" not in st.session_state:
-    st.session_state["prompt_list"] = [None] * 10
+    st.session_state["prompt_list"] = [None] * 12
 if "openai_revised_prompts" not in st.session_state:
-    st.session_state["openai_revised_prompts"] = [None] * 10
+    st.session_state["openai_revised_prompts"] = [None] * 12
 if "imgurls" not in st.session_state:
-    st.session_state["imgurls"] = [None] * 10
+    st.session_state["imgurls"] = [None] * 12
 
 # success message
 if "success_message" not in st.session_state:
