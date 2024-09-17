@@ -20,7 +20,6 @@ st.title('Culture Specific Image Generation Task')
 
 task_name = "breakfast"
 
-
 st.markdown("---"*20)
 
 # Write instructions numbered list
