@@ -40,7 +40,7 @@ def generate_image(prompt):
     response = client.images.generate(
         model="dall-e-3",
         prompt=prefix_prompt + prompt,
-        size="512x512",
+        size="1024x1024",
         quality="standard",
         response_format="b64_json",
         n=1
