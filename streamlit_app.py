@@ -210,6 +210,7 @@ if confirmation and prolific_id:
                 value=st.session_state["prompt_description"],
                 help="This has to be written in your native language.",
             )
+            st.warning("Did you write in your native language?")
             st.session_state["prompt_description"] = prompt_description_val
             st.session_state["prompt_list"][st.session_state["variation_iterator"]] = prompt_description_val
 
