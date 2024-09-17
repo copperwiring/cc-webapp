@@ -27,7 +27,7 @@ st.markdown("---"*20)
 st.write("Instructions")
 st.write("1. Browser compatibility: This task is best done on Chrome or Edge.")
 st.write("2. Please disable VPN as it may give HTTPS errors.")
-st.write("3. Since this task involves writing text in native language, please use a keyboard that supports your native language OR use your mobile phone")
+st.write("3. One part of task involves writing text in native language, please use a keyboard that supports your native language OR use your mobile phone")
 st.write("4. Do not forget to write your Prolific ID in the first step and make sure to confirm it. Once you confirm it, you will not be able to change it.")
 st.write("5. There is no word limit in the text input fields. You can write as much as you want.")
 st.markdown("---"*20)
@@ -197,14 +197,18 @@ if confirmation and prolific_id:
         # Proceed only if breakfast description is submitted
         # if st.session_state["breakfast_submitted"]:
         if st.session_state["id_and_buttonclick_done"]:
-            st.warning("Once you enter your prompt and press enter, you will not be able to change it.")
-
+            # st.warning("Once you enter your prompt and press enter, you will not be able to change it.")
+            st.info("""
+                1. Here, you are going to write in your native language.
+                2. Native language is the language you speak with your family.
+                3. Do not write in English if it is not your native language."""
+            )
             # Text input for Prompt Description
             prompt_description_val = st.text_area(
-                r"$\textsf{\Large Now, you are going to use an image generation tool. You are tasked to describe your breakfast. Please describe it below. You can be as detailed as you want. You are allowed to expand, edit or add to these sentences later to improve the image. We will use your description to generate an image.}$",
+                r"$\textsf{\Large Now, you are going to use an image generation tool. You are tasked to describe \textbf{your} breakfast. Please describe it below. You can be as detailed as you want. You are allowed to expand, edit or add to these sentences later to improve the image. We will use your description to generate an image.}$",
                 key="prompt",
                 value=st.session_state["prompt_description"],
-                help="This will be the prompt for the image generation tool.",
+                help="This has to be written in your native language.",
             )
             st.session_state["prompt_description"] = prompt_description_val
             st.session_state["prompt_list"][st.session_state["variation_iterator"]] = prompt_description_val
