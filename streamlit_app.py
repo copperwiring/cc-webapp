@@ -210,7 +210,7 @@ if confirmation and prolific_id:
                 value=st.session_state["prompt_description"],
                 help="This has to be written in your native language.",
             )
-            st.warning("Did you write in your native language?")
+            st.warning("Did you write in your native language? If you can't see Generate Image button, please click anywhere outside the text box.")
             st.session_state["prompt_description"] = prompt_description_val
             st.session_state["prompt_list"][st.session_state["variation_iterator"]] = prompt_description_val
 
@@ -219,10 +219,9 @@ if confirmation and prolific_id:
                 st.button(
                     'Generate Image',
                     on_click=generate_image_callback,
-                    help = "You also click anwhere outside the text box to see the generat button",
+                    help = "You also click anwhere outside the text box to see the generate button",
                     # disabled=st.session_state["disable_generate_button"]
                 )
-                st.warning("If you can't see Generate Image button, please click anywhere outside the text box.")
                 st.warning("Click Generate Image. Please wait for the image to load. It may take a few seconds.")
                 
 
