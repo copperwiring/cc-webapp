@@ -270,7 +270,7 @@ if confirmation and prolific_id:
                     elif option == "👍":
                         st.session_state["enable_feedback"] = True
 
-                        feedback_text = st.text_area("Please provide feedback on the generated image", height=100)
+                        feedback_text = st.text_area("Please provide feedback on the generated image in 'English' ", height=100)
                         st.write(feedback_text)
 
                         # Add slider for satisfaction
@@ -301,6 +301,8 @@ if confirmation and prolific_id:
                         language_fathers = st.text_input("The language your father speaks")
                         # 5. The country they were born in
                         country_born = st.text_input("The country you were born in")
+                        # Years they have lived in the country they were born in
+                        years_born = st.text_input(f"How many years you have lived in {country_born}")
                         # 6. The country they currently live in
                         country_live = st.text_input("The country you currently live in")
                         # 7. How many years they have lived in the country they currently live in. Use the name of the country from previous question in the sentence.
@@ -331,6 +333,7 @@ if confirmation and prolific_id:
                             "language_mothers": language_mothers,
                             "language_fathers": language_fathers,
                             "country_born": country_born,
+                            "years_born": years_born,
                             "country_live": country_live,
                             "years_live": years_live
                             }
