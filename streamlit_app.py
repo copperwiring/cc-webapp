@@ -205,7 +205,7 @@ if confirmation and prolific_id:
             )
             # Text input for Prompt Description
             prompt_description_val = st.text_area(
-                r"$\textsf{\Large Now, you are going to use an image generation tool. You are tasked to describe \textbf{your} breakfast. Please describe it below. You can be as detailed as you want. You are allowed to expand, edit or add to these sentences later to improve the image. We will use your description to generate an image.}$",
+                r"$\textsf{Now, you are going to use an image generation tool. You are tasked to describe \textbf{your} breakfast. Please describe it below. You can be as detailed as you want. You are allowed to expand, edit or add to these sentences later to improve the image. We will use your description to generate an image.}$",
                 key="prompt",
                 value=st.session_state["prompt_description"],
                 help="This has to be written in your native language.",
