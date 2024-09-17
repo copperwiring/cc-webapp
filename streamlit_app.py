@@ -22,14 +22,18 @@ st.title('Culture Specific Image Generation Task')
 
 
 task_name = "breakfast"
+
+print(f" Goal: To generate images of 'your {task_name}' using an image generation tool.")
 st.markdown("---"*20)
 # Write instructions numbered list
 st.write("Instructions")
+st.write(f" Goal: To generate images of 'your {task_name}' using an image generation tool.")
 st.write("1. Browser compatibility: This task is best done on Chrome or Edge.")
 st.write("2. Please disable work VPN as it may give HTTPS errors. If you are on a university wifi, please use your mobile data to avoid firewall issues.")
 st.write("3. One part of task involves writing text in native language, please use a computer keyboard that supports your native language OR use your mobile phone with native language keyboard.")
 st.write("4. Do not forget to write your Prolific ID in the first step and make sure to confirm it. Once you confirm it, you will not be able to change it.")
 st.write("5. There is no word limit in the text input fields. You can write as much as you want.")
+st.write("6. If webapp crashes (internet issue, etc), please refresh the page and start again. You will be compensated for your completed responses.")
 st.markdown("---"*20)
 
 prefix_prompt = "I NEED to test how the tool works with extremely simple prompts. DO NOT add any detail, just use it AS-IS: "
@@ -302,11 +306,13 @@ if confirmation and prolific_id:
                         # 5. The country they were born in
                         country_born = st.text_input("The country you were born in")
                         # Years they have lived in the country they were born in
-                        years_born = st.text_input(f"How many years you have lived in {country_born}")
+                        ques_years_born = f"How many years you have lived in the country you were born in: {country_born}"
+                        years_born = st.text_input(ques_years_born)
                         # 6. The country they currently live in
                         country_live = st.text_input("The country you currently live in")
                         # 7. How many years they have lived in the country they currently live in. Use the name of the country from previous question in the sentence.
-                        years_live = st.text_input(f"How many years you have lived in {country_live}")
+                        ques_years_live = f"How many years you have lived in the country you currently live in: {country_live}"
+                        years_live = st.text_input(ques_years_live)
 
                         
                         submissions = []
