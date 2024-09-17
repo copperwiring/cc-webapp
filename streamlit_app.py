@@ -4,7 +4,6 @@ from PIL import Image
 import streamlit as st
 from supabase import create_client, Client
 import base64
-from streamlit_feedback import streamlit_feedback
 
 st.cache_data.clear()
 st.cache_resource.clear()
@@ -155,11 +154,12 @@ def generate_image_callback():
     st.session_state["show_thumbs"] = True
 
 
-
+# generate random key using uuid
 # Text input for Prolific ID
 prolific_id = st.text_input(
     'Enter your Prolific ID',
     value=st.session_state["prolific_id"],
+    key = "prolific_id_input",
     disabled=st.session_state["disable_prolific_id"]
 )
 
@@ -274,7 +274,7 @@ if confirmation and prolific_id:
                     elif option == "👍":
                         st.session_state["enable_feedback"] = True
 
-                        feedback_text = st.text_area("Please provide feedback on the generated image in 'English' ", height=100)
+                        feedback_text = st.text_area("Please provide feedback on the generated image in 'English' ", height=100, key = "feedback")
                         st.write(feedback_text)
 
                         # Add slider for satisfaction
@@ -296,23 +296,23 @@ if confirmation and prolific_id:
                         st.write("Thank you!! Finally, please enter the following details:")
                         st.info("Fields are mandatory. Write in 'English' only")
                         # 1. The language they use to speak with their family
-                        language_family = st.text_input("The language you use to speak with your family")
+                        language_family = st.text_input("The language you use to speak with your family", key = "language_family")
                         # 2. The language they use to speak with their colleagues
-                        language_colleagues = st.text_input("The language you use to speak with your colleagues")
+                        language_colleagues = st.text_input("The language you use to speak with your colleagues", key = "language_colleagues")
                         # 3. The language their mothers speak
-                        language_mothers = st.text_input("The language your mother speaks")
+                        language_mothers = st.text_input("The language your mother speaks", key = "language_mothers")
                         # 4. The language their fathers speak
-                        language_fathers = st.text_input("The language your father speaks")
+                        language_fathers = st.text_input("The language your father speaks", key = "language_fathers")
                         # 5. The country they were born in
-                        country_born = st.text_input("The country you were born in")
+                        country_born = st.text_input("The country you were born in", key = "country_born")
                         # Years they have lived in the country they were born in
                         ques_years_born = f"How many years you have lived in the country you were born in: {country_born}"
-                        years_born = st.text_input(ques_years_born)
+                        years_born = st.text_input(ques_years_born, key = "years_born")
                         # 6. The country they currently live in
-                        country_live = st.text_input("The country you currently live in")
+                        country_live = st.text_input("The country you currently live in", key = "country_live")
                         # 7. How many years they have lived in the country they currently live in. Use the name of the country from previous question in the sentence.
                         ques_years_live = f"How many years you have lived in the country you currently live in: {country_live}"
-                        years_live = st.text_input(ques_years_live)
+                        years_live = st.text_input(ques_years_live, key = "years_live")
 
                         
                         submissions = []
