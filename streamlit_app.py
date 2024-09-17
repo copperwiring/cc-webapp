@@ -18,12 +18,11 @@ supabase: Client = create_client(SUPABASE_URL, SUPABASE_KEY)
 
 st.title('Culture Specific Image Generation Task')
 
-
-
 task_name = "breakfast"
 
-print(f" Goal: To generate images of 'your {task_name}' using an image generation tool.")
+
 st.markdown("---"*20)
+
 # Write instructions numbered list
 st.write("Instructions")
 st.write(f" Goal: To generate images of 'your {task_name}' using an image generation tool.")
@@ -91,14 +90,14 @@ if "disable_submit_button" not in st.session_state:     # to disable submit butt
     st.session_state["disable_submit_button"] = False  
 if "id_and_buttonclick_done" not in st.session_state:   # flag to see if prolificid + idconfirmation + submit button is clicked
     st.session_state["id_and_buttonclick_done"] = False
-if "disable_breakfast_input" not in st.session_state:   # to enable/disbale text input for breakfast description
-    st.session_state["disable_breakfast_input"] = False
-if "breakfast_submitted" not in st.session_state:       # flag to see if breakfast description is submitted
-    st.session_state["breakfast_submitted"] = False
-if "breakfast_description_txt" not in st.session_state: # to store breakfast description text   
-    st.session_state["breakfast_description_txt"] = ""
-# if "breakfast_submit_show" not in st.session_state:
-#     st.session_state["breakfast_submit_show"] = False
+if f"disable_{task_name}_input" not in st.session_state:   # to enable/disbale text input for {task_name} description
+    st.session_state[f"disable_{task_name}_input"] = False
+if f"{task_name}_submitted" not in st.session_state:       # flag to see if {task_name} description is submitted
+    st.session_state[f"{task_name}_submitted"] = False
+if f"{task_name}_description_txt" not in st.session_state: # to store {task_name} description text   
+    st.session_state[f"{task_name}_description_txt"] = ""
+# if "{task_name}_submit_show" not in st.session_state:
+#     st.session_state["{task_name}_submit_show"] = False
 if "image_generated" not in st.session_state:            # flag to see if image is being generated
     st.session_state["image_generated"] = False
 if "prompt_description" not in st.session_state:         # to store prompt description text
@@ -135,14 +134,10 @@ def submit_callback():
     st.session_state["disable_submit_button"] = True
 
 
-# Define the callback function for the Breakfast Description Submit button
-def submit_breakfast_callback():
-    st.session_state["disable_breakfast_input"] = True
-    st.session_state["breakfast_submitted"] = True
-
-# def onchange_breakfast_description_callback(value):
-#     if len(value) > 10:
-#         st.session_state["breakfast_submit_show"] = True
+# Define the callback function for the {task_name} Description Submit button
+# def submit_breakfast_callback():
+#     st.session_state[f"disable_{task_name}_input"] = True
+#     st.session_state[f"{task_name}_submitted"] = True
 
 # Define the callback function for the Generate Image button
 def generate_image_callback():
@@ -181,25 +176,6 @@ if confirmation and prolific_id:
         st.warning("You will not be able to change your Prolific ID after this point.")
         st.write("Instructions")
 
-        # st.write("""Write some keywords that describe your breakfast in your country. Someone from France might write the following phrases: "shot of espresso, croissant, orange juice, reading the newspaper", while someone from Scotland might write "cup of tea, bowl of porridge, listening to morning radio".""")
-        
-        # # Text input for Breakfast Description
-        # breakfast_description = st.text_area(
-        #     'Enter your description here',
-        #     value=st.session_state["breakfast_description_txt"],
-        #     disabled=st.session_state["disable_breakfast_input"])
-        
-        # st.session_state["breakfast_description_txt"] = breakfast_description
-
-        # if breakfast_description:
-        #     st.warning("Once you submit your breakfast description, you will not be able to change it.")
-        #     # Submit button for Breakfast Description
-        #     st.button('Submit Breakfast Description', on_click=submit_breakfast_callback, disabled=st.session_state["breakfast_submitted"])
-        # else:
-        #     st.info("Breakfast description submitted and cannot be changed.")
-
-        # Proceed only if breakfast description is submitted
-        # if st.session_state["breakfast_submitted"]:
         if st.session_state["id_and_buttonclick_done"]:
             # st.warning("Once you enter your prompt and press enter, you will not be able to change it.")
             st.info("""
@@ -209,7 +185,7 @@ if confirmation and prolific_id:
             )
             # Text input for Prompt Description
             prompt_description_val = st.text_area(
-                r"Now, you are going to use an image generation tool. You should describe 'your breakfast'. You can be as detailed as you want. No word limit. You are allowed to expand, edit or add to these sentences later to improve the image. We will use your description to generate an image.",
+                f"Now, you are going to use an image generation tool. You should describe 'your {task_name}'. You can be as detailed as you want. No word limit. You are allowed to expand, edit or add to these sentences later to improve the image. We will use your description to generate an image.",
                 key="prompt",
                 value=st.session_state["prompt_description"],
                 help="This has to be written in your native language.",
@@ -255,7 +231,7 @@ if confirmation and prolific_id:
 
                 if st.session_state["show_thumbs"]:
                     option = st.selectbox(
-                        """Are you sure this is what 'your breakfast' looks like? Select '👍' if you are happy with it, else select '👎' """,
+                        f"""Are you sure this is what 'your {task_name}' looks like? Select '👍' if you are happy with it, else select '👎' """,
                         ("None", "👍", "👎"),
                         index=None,
                         key='thumbs_option',  # Add a unique key
@@ -265,7 +241,7 @@ if confirmation and prolific_id:
                     
                     # res = st.radio("Are you satisfied with the generated image?", ["thumbs_down", "thumbs_up"],
                     #          disabled=st.session_state["enable_feedback"])
-                    st.warning("Only select the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your breakfast. If you are not satisfied, please select thumbs down and edit your prompt.")
+                    st.warning(f"Only select the thumbs up when you are finally satisfied with the image and think it is closest to your mental picture of your {task_name}. If you are not satisfied, please select thumbs down and edit your prompt.")
 
                     
                     if option == "👎":
@@ -278,7 +254,7 @@ if confirmation and prolific_id:
                         st.write(feedback_text)
 
                         # Add slider for satisfaction
-                        satisfaction = st.slider("How well does this image represent your mental picture of your breakfast?", 0, 10, 5)
+                        satisfaction = st.slider(f"How well does this image represent your mental picture of your {task_name}?", 0, 10, 5)
                         st.info("0: Not satisfied, 5: No strong feelings, 10: Very satisfied")
 
                         # Draw a line
@@ -329,7 +305,6 @@ if confirmation and prolific_id:
                             st.session_state["success_message"] = True
                             data = {
                             "prolific_id": st.session_state["prolific_id"],
-                            # "breakfast_description_txt": st.session_state["breakfast_description_txt"],
                             "submissions": submissions,
                             "feedback": feedback_text,
                             "satisfaction": satisfaction,
