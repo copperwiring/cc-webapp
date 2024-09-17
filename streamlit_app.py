@@ -177,33 +177,34 @@ if confirmation and prolific_id:
         st.warning("You will not be able to change your Prolific ID after this point.")
         st.write("Instructions")
 
-        st.write("""Write some keywords that describe your breakfast in your country. Someone from France might write the following phrases: "shot of espresso, croissant, orange juice, reading the newspaper", while someone from Scotland might write "cup of tea, bowl of porridge, listening to morning radio".""")
+        # st.write("""Write some keywords that describe your breakfast in your country. Someone from France might write the following phrases: "shot of espresso, croissant, orange juice, reading the newspaper", while someone from Scotland might write "cup of tea, bowl of porridge, listening to morning radio".""")
         
-        # Text input for Breakfast Description
-        breakfast_description = st.text_area(
-            'Enter your description here',
-            value=st.session_state["breakfast_description_txt"],
-            disabled=st.session_state["disable_breakfast_input"])
+        # # Text input for Breakfast Description
+        # breakfast_description = st.text_area(
+        #     'Enter your description here',
+        #     value=st.session_state["breakfast_description_txt"],
+        #     disabled=st.session_state["disable_breakfast_input"])
         
-        st.session_state["breakfast_description_txt"] = breakfast_description
+        # st.session_state["breakfast_description_txt"] = breakfast_description
 
-        if breakfast_description:
-            st.warning("Once you submit your breakfast description, you will not be able to change it.")
-            # Submit button for Breakfast Description
-            st.button('Submit Breakfast Description', on_click=submit_breakfast_callback, disabled=st.session_state["breakfast_submitted"])
-        else:
-            st.info("Breakfast description submitted and cannot be changed.")
+        # if breakfast_description:
+        #     st.warning("Once you submit your breakfast description, you will not be able to change it.")
+        #     # Submit button for Breakfast Description
+        #     st.button('Submit Breakfast Description', on_click=submit_breakfast_callback, disabled=st.session_state["breakfast_submitted"])
+        # else:
+        #     st.info("Breakfast description submitted and cannot be changed.")
 
         # Proceed only if breakfast description is submitted
-        if st.session_state["breakfast_submitted"]:
+        # if st.session_state["breakfast_submitted"]:
+        if st.session_state["id_and_buttonclick_done"]:
             st.warning("Once you enter your prompt and press enter, you will not be able to change it.")
 
             # Text input for Prompt Description
             prompt_description_val = st.text_area(
-                'Now, you are going to use an image generation tool. You are tasked to describe your breakfast in your country. You can use the keywords above as a reference. Please write a sentence below. You are allowed to expand, edit or add to these sentences later to improve the image. This is your prompt',
+                r"$\textsf{\Large Now, you are going to use an image generation tool. You are tasked to describe your breakfast. Please describe it below. You can be as detailed as you want. You are allowed to expand, edit or add to these sentences later to improve the image. We will use your description to generate an image.}$",
                 key="prompt",
                 value=st.session_state["prompt_description"],
-                help = "This will be the prompt for the image generation tool.",
+                help="This will be the prompt for the image generation tool.",
             )
             st.session_state["prompt_description"] = prompt_description_val
             st.session_state["prompt_list"][st.session_state["variation_iterator"]] = prompt_description_val
@@ -277,6 +278,28 @@ if confirmation and prolific_id:
                         appropriateness = st.slider("How appropriate is the generated image for the prompt?", 0, 10, 5)
                         st.info("0: Absolutely not appropriate, 5: Could be appropriate in some contexts but also not appropriate in others, 10: Absolutely appropriate")
 
+                        # Draw a line
+                        st.markdown("---"*20)
+
+                        # Add a text area for the user to enter the above details and save the answers in the database
+                        st.write("Thank you. Finally, please enter the following details:")
+                        st.info(" Fields are mandatory.")
+                        # 1. The language they use to speak with their family
+                        language_family = st.text_input("The language you use to speak with your family")
+                        # 2. The language they use to speak with their colleagues
+                        language_colleagues = st.text_input("The language you use to speak with your colleagues")
+                        # 3. The language their mothers speak
+                        language_mothers = st.text_input("The language your mother speaks")
+                        # 4. The language their fathers speak
+                        language_fathers = st.text_input("The language your father speaks")
+                        # 5. The country they were born in
+                        country_born = st.text_input("The country you were born in")
+                        # 6. The country they currently live in
+                        country_live = st.text_input("The country you currently live in")
+                        # 7. How many years they have lived in the country they currently live in. Use the name of the country from previous question in the sentence.
+                        years_live = st.text_input(f"How many years you have lived in {country_live}")
+
+                        
                         submissions = []
                         for prompt, imgurl, openai_revised_prompt in zip(st.session_state["prompt_list"], st.session_state["imgurls"], st.session_state["openai_revised_prompts"]):
                             submissions.append({
@@ -284,6 +307,8 @@ if confirmation and prolific_id:
                                 "imgurl": imgurl,
                                 "openai_revised_prompt": openai_revised_prompt,
                             })
+
+
 
                         def finalsubmit_response():
                             st.session_state["success_message"] = True
@@ -293,7 +318,14 @@ if confirmation and prolific_id:
                             "submissions": submissions,
                             "feedback": feedback_text,
                             "satisfaction": satisfaction,
-                            "appropriateness": appropriateness
+                            "appropriateness": appropriateness,
+                            "language_family": language_family,
+                            "language_colleagues": language_colleagues,
+                            "language_mothers": language_mothers,
+                            "language_fathers": language_fathers,
+                            "country_born": country_born,
+                            "country_live": country_live,
+                            "years_live": years_live
                             }
 
                             supabase_table_response = (
