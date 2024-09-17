@@ -289,8 +289,8 @@ if confirmation and prolific_id:
                         st.markdown("---"*20)
 
                         # Add a text area for the user to enter the above details and save the answers in the database
-                        st.write("Thank you. Finally, please enter the following details:")
-                        st.info(" Fields are mandatory.")
+                        st.write("Thank you!! Finally, please enter the following details:")
+                        st.info("Fields are mandatory. Write in 'English' only")
                         # 1. The language they use to speak with their family
                         language_family = st.text_input("The language you use to speak with your family")
                         # 2. The language they use to speak with their colleagues
