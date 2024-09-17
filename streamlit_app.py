@@ -221,7 +221,7 @@ if confirmation and prolific_id:
                     on_click=generate_image_callback,
                     # disabled=st.session_state["disable_generate_button"]
                 )
-                st.warning("Please wait for the image to load. It may take a few seconds.")
+                st.warning("Click Generate Image. Please wait for the image to load. It may take a few seconds.")
 
                 # st.spinner("Generating image...Please wait.")
                 if st.session_state["image_generated"]:
@@ -249,7 +249,7 @@ if confirmation and prolific_id:
 
                 if st.session_state["show_thumbs"]:
                     option = st.selectbox(
-                        "Are you satisfied with the generated image?",
+                        """Are you sure this is what 'your breakfast' looks like? Select '👍' if you are happy with it, else select '👎' """,
                         ("None", "👍", "👎"),
                         index=None,
                         key='thumbs_option',  # Add a unique key
