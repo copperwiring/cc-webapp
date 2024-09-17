@@ -219,9 +219,12 @@ if confirmation and prolific_id:
                 st.button(
                     'Generate Image',
                     on_click=generate_image_callback,
+                    help = "You also click anwhere outside the text box to see the generat button",
                     # disabled=st.session_state["disable_generate_button"]
                 )
+                st.warning("If you can't see Generate Image button, please click anywhere outside the text box.")
                 st.warning("Click Generate Image. Please wait for the image to load. It may take a few seconds.")
+                
 
                 # st.spinner("Generating image...Please wait.")
                 if st.session_state["image_generated"]:
